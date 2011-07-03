@@ -1,0 +1,5 @@
+#main fieldset p { margin: 0 0 7px 0; } /* half of the normal bottom margin */
+
+.jNiceSelectWrapper div span {
+	padding: 9px 7px 0;
+}

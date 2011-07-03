@@ -1,0 +1,181 @@
+@charset "utf-8";
+/* 52framework General StyleSheet - contains styles for all the HTML elements this framework supports */
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:75%;
+}
+
+/* ** ** Common Addative Classes ** ** */
+.left  { float:left}
+.right { float:right}
+.clear { clear:both; display:block; overflow:hidden; visibility:hidden; width:0px; height:0px;}
+.hide  { display:none}
+.no_padding { padding: 0 !important; }
+/*.no_padding form { padding: 20px; }*/
+
+.align_right    { text-align:right;}
+.align_left     { text-align:left;}
+.align_center   { text-align:center;}
+.align_justify  { text-align:justify;}
+
+.title_black {
+	color: #fff;
+	background: url(../img/section_bg.jpg) repeat-x;
+	height: 50px;
+	line-height:50px;
+	padding-left: 20px;
+	position: relative;
+	/*--Top right rounded corner--*/
+	border-top-right-radius: 5px;
+	-moz-border-radius-topright: 5px;
+	-khtml-border-radius-topright: 5px;
+	-webkit-border-top-right-radius: 5px;
+	/*--Top left rounded corner--*/
+	border-top-left-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	-khtml-border-radius-topleft: 5px;
+	-webkit-border-top-left-radius: 5px;
+}
+h3.title_black, h3.title_white { margin: 0 !important; }
+
+.title_white {
+	color: #000;
+	background: #fff;
+	border-bottom: 2px;
+	border: 1px solid #dadada;
+	height: 50px;
+	line-height:50px;
+	padding-left: 20px;
+	position: relative;
+	/*--Top right rounded corner--*/
+	border-top-right-radius: 5px;
+	-moz-border-radius-topright: 5px;
+	-khtml-border-radius-topright: 5px;
+	-webkit-border-top-right-radius: 5px;
+	/*--Top left rounded corner--*/
+	border-top-left-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	-khtml-border-radius-topleft: 5px;
+	-webkit-border-top-left-radius: 5px;
+}
+
+a {	color:#525252; text-decoration: none;	}
+a:hover, a:focus { text-decoration:underline;}
+a:active, a:visited { }
+
+blockquote {
+	font-family: Georgia,"Times New Roman", Times, serif;
+	margin:5px;
+	padding:10px;
+	font-size:1.52em;
+	color:#999;
+	font-style:italic;
+	line-height:1.3em;
+	width:100%;
+	quotes:none;
+}
+blockquote.left {border-right:1px dashed #ccc; width:35%;}
+blockquote.right {border-left:1px dashed #ccc; width:35%;}
+
+/* ** ** Header Styles ** ** */
+h1, h2, h3, h4, h5 {margin:0 0 0.5em; line-height:1.1em; padding-left: 20px;}
+h1 {	font-size:2.52em;} 
+h2 {	font-size:1.952em;} 
+h3 {	font-size:1.452em;} 
+h4 {	font-size:1.252em;} 
+h5 {	font-size:1.52em;} 
+h6 {	font-size:1em;}
+
+/* ** ** custom select color ** ** */
+::selection {
+	background: #525252; /* Safari */
+}
+::-moz-selection {
+	background: #525252; /* Firefox */
+	color:#fff;
+}
+/* ** ** paragraph styling ** ** */
+p {margin:0 0 1.52em;}
+p img.left {float:left;margin:1.52em 1.52em 1.52em 0;padding:0;}
+p img.right {float:right;margin:1.52em 0 1.52em 1.52em;}
+
+/* ** ** forms ** ** */
+form fieldset {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius:5px;
+	padding-top:5px;
+	padding-left:5px;
+	border:1px solid #dadada;
+}
+form fieldset legend {font-size:1.4em; padding:0 5px;}
+form input[type=text], form input[type=email], form input[type=url], form input[type=password] {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius:5px;
+	-khtml-border-radius: 5px;
+	height:15px;
+	margin-bottom:5px;
+	border:1px solid #dadada;
+	padding: 5px;
+	width: 200px;
+}
+form label {display:block; height:25px; font-weight: bold;}
+textarea {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius:5px;
+	margin-bottom:5px;
+	border:1px solid #dadada;
+	padding-left: 5px;
+}
+form #btn_submit {
+	float: left;
+	margin-left: 190px;
+}
+form #btn_cancel {
+	margin-left: 10px;
+}
+dl {clear:both;}
+dt {float:left; text-align:right; width:180px; line-height:25px; margin:0 10px 10px 0;}
+dd {line-height:25px; margin:0 0 10px 0;}
+
+
+strong   		{	font-weight:600;}
+em, dfn  		{	font-style:italic;}
+dfn 	 		{   font-weight:600;}
+sup, sub 		{   line-height:0;}
+abbr, acronym   {	border-bottom:1px dashed #ccc;}
+address 		{	margin:0 0 1.5em;font-style:italic;}
+del 			{	color:#666;}
+pre, code, tt   {	font:1em 'andale mono', 'lucida console', monospace;line-height:1.5; display:block;}
+code 			{	background-color:#d5d2d8; display:block; padding:0px 2px 4px 26px; background:#fff url(code.jpg) no-repeat left top; line-height:1.67em;}
+pre 			{	margin:1.5em 0;white-space:pre;}
+
+.left_box {
+	float: left;
+	width: 50%;
+}
+.right_box {
+	float: right;
+	width: 50%;
+}
+
+.no_padding p {
+	margin: 15px;
+}
+
+.invoice_4 {
+	color: red;
+}
+
+.invoice_1 {
+	color: green;
+}
+
+.invoice_3 {
+	color: silver;
+}

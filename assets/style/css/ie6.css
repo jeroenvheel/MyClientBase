@@ -1,0 +1,19 @@
+#main table tr .action a { margin: 0 0 0 10px; text-decoration: none; color: #9b9b9b; }
+#main table tr .action .edit { color: #c5a059; }
+#main table tr .action .delete { color: #a02b2b; }
+#main table tr .action .view { color: #55a34a; }
+#main table tr .action a:hover { text-decoration: underline; }
+
+#main fieldset p { margin: 0 0 7px 0; } /* half of the normal bottom margin */
+
+.jNiceSelectWrapper ul {
+	height: 99px;
+}
+
+.jNiceSelectWrapper div span {
+	padding: 9px 7px 0;
+}
+
+button {
+	width: 85px;
+}

@@ -1,0 +1,120 @@
+body {
+	background: #f0f0f0;
+}
+
+#header_wrapper {
+	background: url(../img/header_bg.jpg) repeat-x;
+	height: 78px;
+}
+
+#header_content {
+	color: #fff;
+	width: 980px !important;
+}
+
+#header_content h1 {
+	line-height: 78px !important;
+}
+
+#navigation_wrapper {
+	background: #f0f0f0 url(../img/navigation_bg.jpg) repeat-x center top;
+	height: 80px;
+	border-top: 1px solid #3d3d3d;
+	border-bottom: 2px solid #dadada;
+}
+
+#navigation {
+	height: 76px;
+	line-height: 38px;
+	position: relative; /*--Set relative positioning on the unordered list itself - not on the list item--*/
+	width: 980px !important;
+}
+#navigation li {
+	color: #fff;
+	float: left;
+	margin: 0; padding: 0;
+	border-right: 1px solid #141414;
+	border-left: 1px solid #3d3d3d;
+}
+#navigation li a {
+	color: #fff;
+	font-weight: bold;
+	padding: 0 15px;
+	display: block;
+	text-decoration: none;
+}
+#navigation li:hover { background: url(../img/navigation_hover_bg.jpg) repeat-x; }
+#navigation li:hover a { }
+#navigation li.selected a { color: #000; }
+#navigation li.selected { background: url(../img/navigation_selected_bg.jpg) repeat-x; }
+/*--Notice the hover color is on the list item itself, not on the link. This is so it can stay highlighted even when hovering over the subnav--*/
+
+#navigation li ul {
+	height: 40px;
+	position: absolute;
+	left: 0;
+	display: none; /*--Hide by default--*/
+	width: 100%;
+}
+#navigation li ul li { border: none; }
+#navigation li ul li:hover { background: none; }
+#navigation li:hover ul { display: block; } /*--Show subnav on hover--*/
+#navigation li ul a { color:#000; font-weight: normal; display: inline; } /*--Since we declared a link style on the parent list link, we will correct it back to its original state--*/
+#navigation li ul a:hover {text-decoration: underline;}
+
+#center_wrapper {
+	clear: both;
+	margin-top: 20px;
+}
+.section_wrapper {
+	margin-bottom: 20px;
+}
+.content {
+	background: #fff;
+	padding: 20px;
+	border: 1px solid #dadada;
+}
+.toggleLink {
+	position: absolute;
+	right: 20px;
+	top: 18px;
+}
+table {
+	width: 678px;
+	margin-bottom: 20px;
+}
+table tr td {
+	height : 34px;
+	line-height : 34px;
+	padding: 0 10px;
+}
+table tr td.client {
+	overflow: hidden;
+}
+table tr .first{
+	padding-left: 20px !important;
+}
+table tr .last {
+	padding-right: 20px !important;
+}
+table th {
+	background: url(../img/th_bg.jpg) repeat-x;
+	height : 34px;
+	line-height : 34px;
+	padding: 0 10px;
+	text-align: left;
+}
+tr.hoverall:hover {background:#EFEFEF;}
+.quicklinks {
+	padding-top: 0 !important;
+}
+.quicklinks li {
+		padding: 10px 0;
+		border-bottom: 1px solid #dadada;
+}
+.quicklinks li.last {
+	border: none;
+}
+.quicklinks li a {
+	font-size: 14px;
+}

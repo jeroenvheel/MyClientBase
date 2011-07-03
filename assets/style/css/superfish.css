@@ -1,0 +1,135 @@
+
+/*** ESSENTIAL STYLES ***/
+.sf-menu, .sf-menu * {
+	margin:			0;
+
+	padding:		0;
+	list-style:		none;
+}
+.sf-menu {
+	line-height:	1.0;
+}
+.sf-menu ul {
+	position:		absolute;
+	top:			-999em;
+	width:			10em; /* left offset of submenus need to match (see below) */
+
+}
+.sf-menu ul li {
+	width:			100%;
+}
+.sf-menu li:hover {
+	visibility:		inherit; /* fixes IE7 'sticky bug' */
+}
+.sf-menu li {
+	float:			left;
+	position:		relative;
+/*	color: #fff; */
+	margin: 0;
+	padding: 0;
+	border-right: 1px solid #141414;
+	border-left: 1px solid #3d3d3d;
+}
+.sf-menu a {
+	display:		block;
+	width:			100%;
+	position:		relative;
+}
+.sf-menu li:hover ul,
+.sf-menu li.sfHover ul {
+	left:			0;
+	top:			3.1em; /* match top ul list item height */
+	z-index:		99;
+}
+ul.sf-menu li:hover li ul,
+ul.sf-menu li.sfHover li ul {
+	top:			-999em;
+}
+ul.sf-menu li li:hover ul,
+ul.sf-menu li li.sfHover ul {
+	left:			10em; /* match ul width */
+	top:			0;
+}
+ul.sf-menu li li:hover li ul,
+ul.sf-menu li li.sfHover li ul {
+	top:			-999em;
+}
+ul.sf-menu li li li:hover ul,
+ul.sf-menu li li li.sfHover ul {
+	left:			10em; /* match ul width */
+	top:			0;
+}
+
+/*** DEMO SKIN ***/
+.sf-menu {
+
+	margin-bottom:	1em;
+	margin-left:		auto;
+	margin-right:		auto;
+}
+.sf-menu a {
+	border:		0;
+	padding: 		.75em 1em;
+	text-decoration:none;
+}
+
+.sf-menu li {
+
+}
+.sf-menu li li {
+	background: 		#141414;
+
+}
+.sf-menu li li li {
+	background:		#525252;
+}
+#navigation.sf-menu li a:active {
+/*	padding:		0 15px;*/
+color: #ffffff;
+}
+#navigation.sf-menu li ul a {
+	display:		block; 
+	color:			#ffffff;
+	text-decoration: none;
+	
+}
+
+#navigation.sf-menu li.selected a:hover {
+color: #ffffff;
+}
+
+#navigation.sf-menu li.selected a {
+color: #ffffff;
+
+}
+
+#navigation.sf-menu li.selected {
+color: white;
+float: left;
+margin: 0;
+padding: 0;
+background: transparent;
+border-right: 1px solid #141414;
+border-left: 1px solid #3D3D3D;
+}
+
+#navigation.sf-menu li.selected ul li a {
+color: #ffffff;
+}
+
+#navigation.sf-menu li a:active {
+color: #ffffff;
+}
+
+
+#navigation.sf-menu li ul li:hover {
+	background:		#525252;
+	color:			#ffffff;
+}
+.sf-menu li:hover, .sf-menu li.sfHover,
+.sf-menu a:focus, .sf-menu a:hover, .sf-menu a:active {
+/*	background:		#525252; */
+	outline:		0;
+
+}
+

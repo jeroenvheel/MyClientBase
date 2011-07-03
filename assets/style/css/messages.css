@@ -1,0 +1,24 @@
+.info, .warning, .success, .error {
+	padding:15px 10px 15px 50px;
+	margin-bottom: 1px;
+}
+
+.info{
+	background:#444444;
+	color:#FFFFFF;
+}
+
+.warning{
+	background:#FFFFCC;
+	color:#222222;
+}
+
+.success{
+	background:#008000;
+	color:#FFFFFF;
+}
+
+.error{
+	background:#CC0000;
+	color:#FFFFFF;
+}
