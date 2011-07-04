@@ -11,15 +11,24 @@
 
     <?php foreach ($invoices as $invoice) { ?>
 
-    <tr>
-        <td class="first"><?php echo $invoice->client_name; ?></td>
-        <td><?php echo $invoice->invoice_number; ?></td>
-        <td><?php echo format_date($invoice->invoice_date_entered); ?></td>
-        <td><?php echo display_currency($invoice->invoice_total); ?></td>
-        <td><?php echo display_currency($invoice->invoice_paid); ?></td>
-        <td class="last"><?php echo display_currency($invoice->invoice_balance); ?></td>
-    </tr>
+        <tr <?php if ($invoice->invoice_is_quote) { ?>style="font-style: italic;"<?php } ?>>
+            <td class="first"><?php echo $invoice->client_name; ?></td>
+            <td><?php echo $invoice->invoice_number; ?></td>
+            <td><?php echo format_date($invoice->invoice_date_entered); ?></td>
+            <td><?php echo display_currency($invoice->invoice_total); ?></td>
+            <td><?php echo display_currency($invoice->invoice_paid); ?></td>
+            <td class="last"><?php echo display_currency($invoice->invoice_balance); ?></td>
+        </tr>
 
     <?php } ?>
+
+    <tr style="font-weight: bold;">
+        <td class="first"><?php echo $this->lang->line('total'); ?></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td><?php echo display_currency($totals['total_invoice']); ?></td>
+        <td><?php echo display_currency($totals['total_paid']); ?></td>
+        <td><?php echo display_currency($totals['total_balance']); ?></td>
+    </tr>
 
 </table>

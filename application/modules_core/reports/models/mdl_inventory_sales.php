@@ -1,12 +1,6 @@
 <?php
 
-class Mdl_Inventory_Sales extends MY_Model {
-
-    function __construct() {
-
-        parent::__construct();
-
-    }
+class Mdl_Inventory_Sales extends CI_Model {
 
     function get() {
 
