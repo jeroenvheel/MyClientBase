@@ -65,7 +65,7 @@ class Mdl_Mailer extends MY_Model {
 
     }
 
-    public function email_invoice($invoice, $invoice_template, $from_email, $from_name, $to, $subject, $email_body = ' ', $email_footer, $invoice_as_body, $email_cc = NULL, $email_bcc = NULL) {
+    public function email_invoice($invoice, $invoice_template, $from_email, $from_name, $to, $subject, $email_body, $email_footer, $invoice_as_body, $email_cc = NULL, $email_bcc = NULL) {
 
         $this->load->helper($this->mdl_mcb_data->setting('pdf_plugin'));
 
@@ -74,6 +74,8 @@ class Mdl_Mailer extends MY_Model {
         $filename = $this->lang->line('invoice') . '_' . $invoice->invoice_number;
 
         $full_filename = 'uploads/temp/' . $filename . '.pdf';
+        
+        $email_body = ($email_body) ? $email_body : ' ';
 
         $data = array(
             'invoice'       =>  $invoice,
