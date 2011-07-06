@@ -122,6 +122,21 @@ form input[type=text], form input[type=email], form input[type=url], form input[
 	padding: 5px;
 	width: 200px;
 }
+form input.datepicker  {
+	width: auto;
+	width: 80px;
+	text-align: center;
+}
+form select {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius:5px;
+	-khtml-border-radius: 5px;
+	border:1px solid #dadada;
+	min-width: 150px;
+	padding: 5px;
+
+}
 form label {display:block; height:25px; font-weight: bold;}
 textarea {
 	-moz-border-radius: 5px;
