@@ -1,6 +1,6 @@
 <?php $this->load->view('dashboard/header'); ?>
 
-<?php // $this->load->view('dashboard/jquery_date_picker'); ?>
+<?php $this->load->view('dashboard/jquery_date_picker'); ?>
 
 <?php $this->load->view('invoices/jquery_choose_client'); ?>
 
