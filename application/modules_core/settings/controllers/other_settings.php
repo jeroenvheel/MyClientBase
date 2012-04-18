@@ -27,7 +27,7 @@ class Other_Settings extends Admin_Controller {
 		$data = array(
 			'pdf_plugins'	=>  $pdf_plugins,
 			'languages'		=>  $this->mcb_language->languages,
-			'date_formats'	=>  $this->mdl_invoices->date_formats
+			'date_formats'	=>  date_formats()
 		);
 
 		$this->load->view('other_settings', $data);
@@ -40,9 +40,9 @@ class Other_Settings extends Admin_Controller {
 
 		$this->mdl_mcb_data->save('default_date_format', $this->input->post('default_date_format'));
 
-		$this->mdl_mcb_data->save('default_date_format_mask', $this->mdl_invoices->date_formats[$this->input->post('default_date_format')]['mask']);
+		$this->mdl_mcb_data->save('default_date_format_mask', date_formats($this->input->post('default_date_format'), 'mask'));
 
-		$this->mdl_mcb_data->save('default_date_format_picker', $this->mdl_invoices->date_formats[$this->input->post('default_date_format')]['picker']);
+		$this->mdl_mcb_data->save('default_date_format_picker', date_formats($this->input->post('default_date_format'), 'picker'));
 
 		$this->mdl_mcb_data->save('pdf_plugin', $this->input->post('pdf_plugin'));
 

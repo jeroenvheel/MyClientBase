@@ -11,7 +11,7 @@ class Mdl_Invoice_Groups extends MY_Model {
 		$this->primary_key = 'mcb_invoice_groups.invoice_group_id';
 
 		$this->select_fields = "
-		SQL_CALC_FOUND_ROWS *";
+		SQL_CALC_FOUND_ROWS mcb_invoice_groups.*";
 
 		$this->order_by = 'mcb_invoice_groups.invoice_group_prefix';
 
@@ -57,9 +57,9 @@ class Mdl_Invoice_Groups extends MY_Model {
 		if ($invoice->invoice_group_id <> $invoice_group_id) {
 
 			$group = parent::get_by_id($invoice_group_id);
-			
+
 			$invoice_number = '';
-			
+
 			$date_prefix = FALSE;
 
 			if ($group->invoice_group_prefix_year) {

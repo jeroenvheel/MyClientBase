@@ -2,144 +2,164 @@
 
 class Items extends Admin_Controller {
 
-    function __construct() {
+	function __construct() {
 
-        parent::__construct();
+		parent::__construct();
 
-        $this->_post_handler();
+		$this->_post_handler();
 
-        $this->load->model(
-            array(
-            'mdl_items',
-            'mdl_invoices',
-            'inventory/mdl_inventory',
-            'tax_rates/mdl_tax_rates'
-            )
-        );
+		$this->load->model(
+			array(
+			'mdl_items',
+			'mdl_invoices',
+			'inventory/mdl_inventory',
+			'tax_rates/mdl_tax_rates'
+			)
+		);
 
-    }
+	}
 
-    function form() {
+	function form() {
 
-        if (!$this->mdl_items->validate()) {
+		if (!$this->mdl_items->validate()) {
 
-            if (!$_POST AND uri_assoc('invoice_item_id', 4)) {
+			if (!$_POST AND uri_assoc('invoice_item_id', 4)) {
 
-                $this->mdl_items->prep_validation(uri_assoc('invoice_item_id', 4));
+				$this->mdl_items->prep_validation(uri_assoc('invoice_item_id', 4));
 
-                $this->mdl_items->set_form_value('item_date', format_date($this->mdl_items->form_value('item_date')));
+				$this->mdl_items->set_form_value('item_date', format_date($this->mdl_items->form_value('item_date')));
 
-            }
+			}
 
-            elseif (!$_POST AND !uri_assoc('invoice_item_id', 4)) {
+			elseif (!$_POST AND !uri_assoc('invoice_item_id', 4)) {
 
-                $this->mdl_items->set_form_value('item_date', format_date(time()));
+				$default_item_tax_rate_id = $this->mdl_mcb_userdata->setting('default_item_tax_rate_id');
+				$default_item_tax_option = $this->mdl_mcb_userdata->setting('default_item_tax_option');
 
-            }
+				if (!$default_item_tax_rate_id) {
 
-            $invoice = $this->mdl_invoices->get(array('where'=>array('mcb_invoices.invoice_id'=>uri_assoc('invoice_id', 4))));
+					$default_item_tax_rate_id = $this->mdl_mcb_data->setting('default_item_tax_rate_id');
 
-            $params = array(
-                'group_by_type' =>  TRUE
-            );
+				}
 
-            $inventory_items = $this->mdl_inventory->get($params);
+				if ($default_item_tax_option == "") {
+					
+					$default_item_tax_option = $this->mdl_mcb_data->setting('default_item_tax_option');
 
-            $data = array(
-                'invoice'           =>	$invoice,
-                'inventory_items'	=>	$inventory_items,
-                'tax_rates'         =>	$this->mdl_tax_rates->get(),
-                'custom_fields'     =>	$this->mdl_items->custom_fields
-            );
+				}
 
-            $this->load->view('item_form', $data);
+				$this->mdl_items->set_form_value('item_date', format_date(time()));
+				$this->mdl_items->set_form_value('item_qty', 1);
+				$this->mdl_items->set_form_value('tax_rate_id', $default_item_tax_rate_id);
+				$this->mdl_items->set_form_value('item_tax_option', $default_item_tax_option);
 
-        }
+			}
 
-        else {
+			$invoice = $this->mdl_invoices->get(array('where'=>array('mcb_invoices.invoice_id'=>uri_assoc('invoice_id', 4))));
 
-            $invoice_item_id = uri_assoc('invoice_item_id', 4);
+			$params = array(
+				'group_by_type' =>  TRUE
+			);
 
-            $this->mdl_items->save($this->mdl_items->db_array(), $invoice_item_id);
+			$inventory_items = $this->mdl_inventory->get($params);
 
-            if (!$invoice_item_id) {
+			$data = array(
+				'invoice'           =>	$invoice,
+				'inventory_items'	=>	$inventory_items,
+				'tax_rates'         =>	$this->mdl_tax_rates->get(),
+				'custom_fields'     =>	$this->mdl_items->custom_fields
+			);
 
-                $invoice_item_id = $this->db->insert_id();
+			$this->load->view('item_form', $data);
 
-            }
+		}
 
-            $this->load->model('mdl_invoice_amounts');
+		else {
 
-            $this->mdl_invoice_amounts->adjust(uri_assoc('invoice_id', 4));
+			$invoice = $this->mdl_invoices->get(array('where'=>array('mcb_invoices.invoice_id'=>uri_assoc('invoice_id', 4))));
 
-            if ($this->input->post('inventory_id')) {
+			$invoice_item_id = uri_assoc('invoice_item_id', 4);
 
-                $this->load->model('inventory/mdl_inventory_stock');
+			$this->mdl_items->save($this->mdl_items->db_array(), $invoice_item_id);
 
-                $this->mdl_inventory_stock->adjust($this->input->post('inventory_id'), ($this->input->post('item_qty') * -1), $invoice_item_id);
+			if (!$invoice_item_id) {
 
-            }
+				$invoice_item_id = $this->db->insert_id();
 
-            $this->session->set_flashdata('tab_index', 1);
+			}
 
-            redirect($this->session->userdata('last_index'));
+			$this->load->model('mdl_invoice_amounts');
 
-        }
+			$this->mdl_invoice_amounts->adjust(uri_assoc('invoice_id', 4));
 
-    }
+			if (!$invoice->invoice_is_quote and $this->input->post('inventory_id')) {
 
-    function delete() {
+				$this->load->model('inventory/mdl_inventory_stock');
 
-        $invoice_item_id = uri_assoc('invoice_item_id', 4);
+				$this->mdl_inventory_stock->adjust($this->input->post('inventory_id'), ($this->input->post('item_qty') * -1), $invoice_item_id);
 
-        $invoice_id = uri_assoc('invoice_id', 4);
+			}
 
-        if ($invoice_item_id) {
+			$this->session->set_flashdata('tab_index', 1);
 
-            $this->mdl_items->delete($invoice_item_id);
+			redirect($this->session->userdata('last_index'));
 
-            $this->load->model('mdl_invoice_amounts');
+		}
 
-            $this->mdl_invoice_amounts->adjust($invoice_id);
+	}
 
-            $this->load->model('inventory/mdl_inventory_stock');
+	function delete() {
 
-            $this->mdl_inventory_stock->delete_by_invoice_item_id($invoice_item_id);
+		$invoice_item_id = uri_assoc('invoice_item_id', 4);
 
-        }
+		$invoice_id = uri_assoc('invoice_id', 4);
 
-        $this->session->set_flashdata('tab_index', 1);
+		if ($invoice_item_id) {
 
-        redirect($this->session->userdata('last_index'));
+			$this->mdl_items->delete($invoice_item_id);
 
-    }
+			$this->load->model('mdl_invoice_amounts');
 
-    function jquery_save_order() {
-       
-        $item_orders = explode('&', $this->input->post('data'));
+			$this->mdl_invoice_amounts->adjust($invoice_id);
 
-        unset($item_orders[0]);
+			$this->load->model('inventory/mdl_inventory_stock');
 
-        foreach ($item_orders as $item_order=>$invoice_item_id) {
+			$this->mdl_inventory_stock->delete_by_invoice_item_id($invoice_item_id);
 
-            $invoice_item_id = str_replace('dnd[]=', '', $invoice_item_id);
+		}
 
-            $this->mdl_items->save_order($invoice_item_id, $item_order);
+		$this->session->set_flashdata('tab_index', 1);
+
+		redirect($this->session->userdata('last_index'));
+
+	}
+
+	function jquery_save_order() {
+
+		$item_orders = explode('&', $this->input->post('data'));
+
+		unset($item_orders[0]);
+
+		foreach ($item_orders as $item_order=>$invoice_item_id) {
+
+			$invoice_item_id = str_replace('dnd[]=', '', $invoice_item_id);
+
+			$this->mdl_items->save_order($invoice_item_id, $item_order);
 
 
-        }
+		}
 
-    }
+	}
 
-    function _post_handler() {
+	function _post_handler() {
 
-        if ($this->input->post('btn_cancel')) {
+		if ($this->input->post('btn_cancel')) {
 
-            redirect($this->session->userdata('last_index'));
+			redirect($this->session->userdata('last_index'));
 
-        }
+		}
 
-    }
+	}
 
 }
 

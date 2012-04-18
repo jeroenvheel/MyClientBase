@@ -14,6 +14,7 @@
                     <tr>
                         <th>&nbsp;</th>
                         <th><?php echo $this->lang->line('invoice_number'); ?></th>
+						<th><?php echo $this->lang->line('client'); ?></th>
                         <th><?php echo $this->lang->line('due_date'); ?></th>
                         <th><?php echo $this->lang->line('amount'); ?></th>
                         <th><?php echo $this->lang->line('email_address'); ?></th>
@@ -22,6 +23,7 @@
                     <tr>
                         <td><input type="checkbox" name="invoice_ids[<?php echo $invoice->invoice_id; ?>]" value="<?php echo $invoice->invoice_id; ?>" /></td>
                         <td><?php echo invoice_id($invoice); ?></td>
+						<td><?php echo invoice_to_client_name($invoice); ?></td>
                         <td><?php echo invoice_due_date($invoice); ?></td>
                         <td><?php echo invoice_total($invoice); ?></td>
                         <td><input type="text" name="email_address[<?php echo $invoice->invoice_id; ?>]" value="<?php echo invoice_to_email_address($invoice); ?>" /></td>
@@ -42,7 +44,7 @@
             <div class="content toggle">
 
                 <dl>
-                    <dt><label><?php echo $this->lang->line('invoice_template'); ?>: </label></dt>
+                    <dt><label>* <?php echo $this->lang->line('invoice_template'); ?>: </label></dt>
                     <dd>
                         <select name="invoice_template">
                             <?php foreach ($templates as $template) { ?>
@@ -53,11 +55,11 @@
                 </dl>
 
                 <dl>
-                    <dt><label><?php echo $this->lang->line('from_name'); ?>: *</label></dt>
+                    <dt><label>* <?php echo $this->lang->line('from_name'); ?>: </label></dt>
                     <dd><input type="text" name="email_from_name" value="<?php echo $this->mdl_mailer->form_value('email_from_name'); ?>" /></dd>
                 </dl>
                 <dl>
-                    <dt><label><?php echo $this->lang->line('from_email'); ?>: *</label></dt>
+                    <dt><label>* <?php echo $this->lang->line('from_email'); ?>: </label></dt>
                     <dd><input type="text" name="email_from_email" value="<?php echo $this->mdl_mailer->form_value('email_from_email'); ?>" /></dd>
                 </dl>
 
@@ -70,7 +72,7 @@
                     <dd><input type="text" name="email_bcc" value="<?php echo ($this->mdl_mailer->form_value('email_bcc')) ? $this->mdl_mailer->form_value('email_bcc') : $this->mdl_mcb_data->setting('default_bcc'); ?>" /></dd>
                 </dl>
                 <dl>
-                    <dt><label><?php echo $this->lang->line('subject'); ?>: *</label></dt>
+                    <dt><label>* <?php echo $this->lang->line('subject'); ?>: </label></dt>
                     <dd><input type="text" name="email_subject" value="<?php echo $this->mdl_mailer->form_value('email_subject'); ?>" /></dd>
                 </dl>
                 <dl>

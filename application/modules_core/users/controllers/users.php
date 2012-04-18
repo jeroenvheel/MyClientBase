@@ -36,18 +36,25 @@ class Users extends Admin_Controller {
 
     function form() {
 
+		$user_id = uri_assoc('user_id');
+
         if (!$this->mdl_users->validate()) {
 
-            $this->load->helper('form');
+			$this->load->model('tax_rates/mdl_tax_rates');
 
-            if (!$_POST AND uri_assoc('user_id')) {
+            if (!$_POST AND $user_id) {
 
-                $this->mdl_users->prep_validation(uri_assoc('user_id'));
+                $this->mdl_users->prep_validation($user_id);
+
+				$this->mdl_users->set_form_value('default_tax_rate_id', $this->mdl_mcb_userdata->get($user_id, 'default_tax_rate_id'));
+				$this->mdl_users->set_form_value('default_tax_rate_option', $this->mdl_mcb_userdata->get($user_id, 'default_tax_rate_option'));
+				$this->mdl_users->set_form_value('default_item_tax_rate_id', $this->mdl_mcb_userdata->get($user_id, 'default_item_tax_rate_id'));
 
             }
 
             $data = array(
-                'custom_fields'	=>	$this->mdl_users->custom_fields
+                'custom_fields'	=>	$this->mdl_users->custom_fields,
+				'tax_rates'		=>	$this->mdl_tax_rates->get()
             );
 
             $this->load->view('form', $data);
@@ -56,7 +63,9 @@ class Users extends Admin_Controller {
 
         else {
 
-            $this->mdl_users->save($this->mdl_users->db_array(), uri_assoc('user_id'));
+            $user_id = $this->mdl_users->save($this->mdl_users->db_array(), $user_id);
+
+			$this->mdl_mcb_userdata->save_settings($user_id, $this->input->post('user_settings'));
 
             $this->redir->redirect('users');
 
@@ -66,23 +75,7 @@ class Users extends Admin_Controller {
 
     function delete() {
 
-        if (uri_assoc('user_id')) {
-
-            if (uri_assoc('user_id') == $this->session->userdata('user_id') OR uri_assoc('user_id') == 1) {
-
-                $this->session->set_flashdata('custom_error', $this->lang->line('cannot_delete_user_account') . '.');
-
-                $this->redir->redirect('users');
-
-            }
-
-            else {
-
-                $this->mdl_users->delete(array('user_id'=>uri_assoc('user_id')));
-
-            }
-
-        }
+		$this->mdl_users->delete(uri_assoc('user_id'));
 
         $this->redir->redirect('users');
 
@@ -96,7 +89,9 @@ class Users extends Admin_Controller {
 
     function change_password() {
 
-        if (!$this->mdl_users->validate_change_password() AND uri_assoc('user_id')) {
+		$user_id = uri_assoc('user_id');
+
+        if (!$this->mdl_users->validate_change_password() and $user_id) {
 
             $this->load->view('change_password');
 
@@ -104,7 +99,7 @@ class Users extends Admin_Controller {
 
         else {
 
-            $this->mdl_users->save_change_password();
+            $this->mdl_users->save_change_password($user_id);
 
             $this->redir->redirect('users');
 

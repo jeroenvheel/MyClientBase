@@ -141,6 +141,6 @@
 	</div>
 </div>
 
-<?php $this->load->view('dashboard/sidebar', array('side_block'=>'client_center/sidebar_change_pw')); ?>
+<?php $this->load->view('sidebar_change_pw'); ?>
 
 <?php $this->load->view('dashboard/footer'); ?>

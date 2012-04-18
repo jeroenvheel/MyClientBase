@@ -18,18 +18,23 @@ class Cron extends Cron_Controller {
 
         $this->_check_auth($cron_key);
 
-        $this->load->model('invoices/mdl_invoices');
+        $this->load->model(array('invoices/mdl_invoices', 'mailer/mdl_mailer', 'email_templates/mdl_email_templates'));
 
-        $this->load->model('mailer/mdl_mailer');
+		$default_template = $this->mdl_email_templates->get_by_id($this->mdl_mcb_data->setting('default_overdue_invoice_email_template'));
+		$email_body = ($default_template) ? $default_template->email_template_body : ' ';
+		$email_footer = ($default_template) ? $default_template->email_template_footer : ' ';
 
         $params = array(
+			'where'	=>	array(
+				'invoice_is_quote'	=>	0
+			),
             'having' =>  array(
                 'invoice_is_overdue'   =>  1
             ),
             'get_invoice_items'     =>  TRUE,
             'get_invoice_tax_rates' =>  TRUE,
             'get_invoice_payments'  =>  TRUE,
-            'get_invoice_tags'      =>  TRUE
+            'get_invoice_tags'      =>  TRUE,
         );
 
         $invoices = $this->mdl_invoices->get($params);
@@ -40,13 +45,12 @@ class Cron extends Cron_Controller {
             $from_email = $invoice->from_email_address;
             $from_name = $invoice->from_first_name . ' ' . $invoice->from_last_name;
             $subject = $this->lang->line('overdue_invoice_reminder');
-            $email_body = '';
             $email_cc = $this->mdl_mcb_data->setting('default_cc');
             $email_bcc = $this->mdl_mcb_data->setting('default_bcc');
-            $invoice_as_body = 1;
+            $invoice_as_body = $this->mdl_mcb_data->setting('default_email_body');
             $to = $invoice->client_email_address;
-        
-            $this->mdl_mailer->email_invoice($invoice, $invoice_template, $from_email, $from_name, $to, $subject, $email_body, $invoice_as_body, $email_cc, $email_bcc);
+
+            $this->mdl_mailer->email_invoice($invoice, $invoice_template, $from_email, $from_name, $to, $subject, $email_body, $email_footer, $invoice_as_body, $email_cc, $email_bcc);
 
         }
 

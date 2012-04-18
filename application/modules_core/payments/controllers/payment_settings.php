@@ -6,14 +6,28 @@ class Payment_Settings extends Admin_Controller {
 
 		parent::__construct();
 
-		$this->load->model('mdl_payments');
+		$this->load->model(array('mdl_payments', 'mdl_payment_methods'));
 
 	}
 
 	function display() {
 
+		$this->load->helper('directory');
+
+		$merchant_drivers = directory_map('application/libraries/Merchant/drivers', FALSE);
+
+		foreach ($merchant_drivers as $key=>$value) {
+
+			$value = strtolower($value);
+
+			$merchant_drivers[$key] = ucfirst(str_replace('.php', '', str_replace('merchant_', '', $value)));
+
+		}
+
 		$data = array(
-			'receipt_templates'	=>	$this->mdl_templates->get('payment_receipts')
+			'receipt_templates'	=>	$this->mdl_templates->get('payment_receipts'),
+			'merchant_drivers'	=>	$merchant_drivers,
+			'payment_methods'	=>	$this->mdl_payment_methods->get()
 		);
 
 		$this->load->view('settings', $data);

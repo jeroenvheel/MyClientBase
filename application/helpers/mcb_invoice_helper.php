@@ -1,9 +1,5 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-$CI =& get_instance();
-
-$CI->load->helper(array('mcb_invoice_amount', 'mcb_invoice_item', 'mcb_invoice_payment', 'mcb_numbers'));
-
 /**
  * BEGIN COMPANY (FROM) SPECIFIC HELPERS
  */
@@ -57,6 +53,12 @@ function invoice_from_email($invoice) {
 
 }
 
+function invoice_from_fax_number($invoice) {
+
+	return $invoice->from_fax_number;
+
+}
+
 function invoice_from_name($invoice) {
 
 	/* First + Last name invoice is from */
@@ -96,6 +98,34 @@ function invoice_from_zip_city($invoice) {
 
 	/* Zip + City invoice is from */
 	return $invoice->from_zip . ' ' . $invoice->from_city;
+
+}
+
+function invoice_payment_link($invoice) {
+
+	global $CI;
+
+	if ($CI->mdl_mcb_data->setting('merchant_enabled')) {
+
+		$link = $CI->lib_output->payment_link($invoice);
+
+		/** Unless I'm just stupid (highly likely), the PDF seems to want the
+		 * entire GET string urlencoded...
+		 */
+		if ($CI->uri->segment(2) == 'generate_pdf') {
+
+			$replace = substr($link, strpos($link, '?') + 1);
+			$replace = substr($replace, 0, strpos($replace, '">') - 2);
+
+			$link = str_replace($replace, urlencode($replace), $link);
+
+		}
+
+		return $link;
+
+	}
+
+	return '';
 
 }
 
@@ -165,7 +195,13 @@ function invoice_to_country($invoice) {
 
 function invoice_to_email_address($invoice) {
 
-    return $invoice->client_email_address;
+	return $invoice->client_email_address;
+
+}
+
+function invoice_to_fax_number($invoice) {
+
+	return $invoice->client_fax_number;
 
 }
 
@@ -279,14 +315,14 @@ function invoice_logo($output_type = 'pdf') {
 
 		if ($output_type == 'pdf') {
 
-            /** Use a system path to include the image in the PDF **/
+			/** Use a system path to include the image in the PDF **/
 			return '<img src="' . getcwd() . '/uploads/invoice_logos/' . $CI->mdl_mcb_data->setting('invoice_logo') . '" />';
 
 		}
 
 		elseif ($output_type == 'html') {
 
-            /** Use a URL to include the image in the HTML **/
+			/** Use a URL to include the image in the HTML **/
 			return '<img src="' . base_url() . 'uploads/invoice_logos/' . $CI->mdl_mcb_data->setting('invoice_logo') . '" />';
 
 		}

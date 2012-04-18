@@ -2,7 +2,7 @@
 
 	<div class="section_wrapper">
 
-		<h3 class="title_white"><?php echo $this->lang->line('quicklinks'); ?></h3>
+		<h3 class="title_black"><?php echo $this->lang->line('quicklinks'); ?></h3>
 
 		<ul class="quicklinks content toggle" id="quicklinks_client_center">
 			<li><?php echo anchor('client_center', $this->lang->line('client_center')); ?></li>

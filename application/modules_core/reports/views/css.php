@@ -11,5 +11,9 @@
     td {
         border-bottom: thin dotted black;
     }
+	
+	.col_amount {
+		text-align: right;
+	}
 
 </style>

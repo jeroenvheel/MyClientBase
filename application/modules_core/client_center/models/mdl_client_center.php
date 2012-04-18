@@ -2,7 +2,7 @@
 
 class Mdl_Client_Center extends MY_Model {
 
-	function __construct() {
+	public function __construct() {
 
 		parent::__construct();
 
@@ -20,20 +20,47 @@ class Mdl_Client_Center extends MY_Model {
 
 	}
 
-	function validate() {
+	public function validate() {
 
+		$this->form_validation->set_rules('client_id_autocomplete_label');
 		$this->form_validation->set_rules('client_id', $this->lang->line('client'), 'required');
-		$this->form_validation->set_rules('username', $this->lang->line('username'), 'required');
+		$this->form_validation->set_rules('username', $this->lang->line('username'), 'required|callback_username_check');
 		$this->form_validation->set_rules('password', $this->lang->line('password'), 'required');
 		$this->form_validation->set_rules('passwordv', $this->lang->line('passwordv'), 'required|matches[password]');
+		$this->form_validation->set_rules('email_address', $this->lang->line('email_address'), 'required');
 
 		return parent::validate($this);
 
 	}
 
-	function save($db_array, $user_id = NULL) {
+	public function username_check($username) {
+
+		$this->db->where('username', $username);
+
+		if (uri_assoc('user_id', 4)) {
+
+			$this->db->where('user_id <>', uri_assoc('user_id', 4));
+
+		}
+
+		$query = $this->db->get('mcb_users');
+
+		if ($query->num_rows()) {
+
+			$this->form_validation->set_message('username_check', $this->lang->line('username_already_exists'));
+
+			return FALSE;
+
+		}
+
+		return TRUE;
+
+	}
+
+	public function save($db_array, $user_id = NULL) {
 
 		unset($db_array['passwordv']);
+		unset($db_array['client_id_autocomplete_label']);
 
 		$db_array['password'] = md5($db_array['password']);
 
@@ -41,7 +68,15 @@ class Mdl_Client_Center extends MY_Model {
 
 	}
 
-	function invoice_belongs_to_client($invoice_id, $client_id) {
+	public function prep_validation($client_id) {
+
+		parent::prep_validation($client_id);
+
+		$this->form_values['client_id_autocomplete_label'] = $this->form_values['client_name'];
+
+	}
+
+	public function invoice_belongs_to_client($invoice_id, $client_id) {
 
 		$this->db->where('invoice_id', $invoice_id);
 

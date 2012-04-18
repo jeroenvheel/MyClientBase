@@ -1,4 +1,4 @@
-<?php $this->load->view('dashboard/header'); ?>
+<?php $this->load->view('dashboard/header', array('header_insert'=>array('invoices/jquery_client_ac'))); ?>
 
 <script type="text/javascript">
 	$(function() {
@@ -11,7 +11,7 @@
 
            var output_type = $('#output_type').val();
 
-           var client_id = $('#client_id').val();
+           var client_id = $('#client_id_autocomplete_hidden').val();
 
            if (output_type == 'view') {
 
@@ -44,17 +44,8 @@
                 <dl>
                     <dt><label><?php echo $this->lang->line('client'); ?>: </label></dt>
                     <dd>
-                        <select name="client_id" id="client_id">
-
-                            <option value=""></option>
-
-                            <?php foreach ($clients as $client) { ?>
-
-                            <option value="<?php echo $client->client_id; ?>"><?php echo $client->client_name; ?></option>
-
-                            <?php } ?>
-
-                        </select>
+						<input type="text" id="client_id_autocomplete_label" name="client_id_autocomplete_label" value="<?php echo $this->lang->line('all_clients'); ?>" />
+						<input type="hidden" id="client_id_autocomplete_hidden" name="client_id" value="0"/>
                     </dd>
                 </dl>
 

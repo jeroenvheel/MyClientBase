@@ -11,7 +11,7 @@ class Mdl_Tax_Rates extends MY_Model {
 		$this->primary_key = 'mcb_tax_rates.tax_rate_id';
 
 		$this->select_fields = "
-		SQL_CALC_FOUND_ROWS *";
+		SQL_CALC_FOUND_ROWS mcb_tax_rates.*";
 
 		$this->order_by = 'tax_rate_percent';
 
@@ -32,7 +32,7 @@ class Mdl_Tax_Rates extends MY_Model {
 
 		/*
 		 * Before deleting a tax rate, make sure no invoices are assigned
-		 */
+		*/
 
 		$this->db->where('tax_rate_id', $tax_rate_id);
 
@@ -65,7 +65,7 @@ class Mdl_Tax_Rates extends MY_Model {
 			return TRUE;
 
 		}
-		
+
 	}
 
 	public function get_invoice_tax_rates($invoice_id) {

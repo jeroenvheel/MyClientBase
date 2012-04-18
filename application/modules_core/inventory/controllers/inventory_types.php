@@ -33,8 +33,6 @@ class Inventory_Types extends Admin_Controller {
 
 		if (!$this->mdl_inventory_types->validate()) {
 
-			$this->load->helper('form');
-
 			if (!$_POST AND uri_assoc('inventory_type_id', 4)) {
 
 				$this->mdl_inventory_types->prep_validation(uri_assoc('inventory_type_id', 4));

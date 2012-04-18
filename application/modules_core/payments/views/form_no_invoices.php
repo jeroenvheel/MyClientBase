@@ -1,6 +1,6 @@
 <?php $this->load->view('dashboard/header'); ?>
 
-<div class="grid_7" id="content_wrapper">
+<div class="grid_10" id="content_wrapper">
 
 	<div class="section_wrapper">
 
@@ -16,6 +16,6 @@
 
 </div>
 
-<?php $this->load->view('dashboard/sidebar', array('side_block'=>'payments/sidebar')); ?>
+<?php $this->load->view('dashboard/sidebar'); ?>
 
 <?php $this->load->view('dashboard/footer'); ?>

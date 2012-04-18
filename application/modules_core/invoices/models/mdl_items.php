@@ -13,13 +13,13 @@ class Mdl_Items extends MY_Model {
 		$this->select_fields = "
 		SQL_CALC_FOUND_ROWS *,
         mcb_invoice_items.tax_rate_id AS item_tax_rate_id,
-        mcb_inventory.tax_rate_id AS inventory_tax_rate_id";
+        mcb_inventory.inventory_tax_rate_id AS inventory_tax_rate_id";
 
-        $this->joins = array(
-            'mcb_inventory' =>  array(
-                'mcb_inventory.inventory_id = mcb_invoice_items.inventory_id', 'left'
-            )
-        );
+		$this->joins = array(
+			'mcb_inventory' =>  array(
+				'mcb_inventory.inventory_id = mcb_invoice_items.inventory_id', 'left'
+			)
+		);
 
 		$this->custom_fields = $this->mdl_fields->get_object_fields(2);
 
@@ -34,8 +34,8 @@ class Mdl_Items extends MY_Model {
 		$this->form_validation->set_rules('item_price', $this->lang->line('unit_price'), 'required');
 		$this->form_validation->set_rules('is_taxable', $this->lang->line('taxable'));
 		$this->form_validation->set_rules('tax_rate_id', $this->lang->line('tax_rate'), 'required');
-        $this->form_validation->set_rules('item_tax_option', $this->lang->line('item_tax_option'));
-        $this->form_validation->set_rules('inventory_id');
+		$this->form_validation->set_rules('item_tax_option', $this->lang->line('item_tax_option'));
+		$this->form_validation->set_rules('inventory_id');
 
 		foreach ($this->custom_fields as $custom_field) {
 
@@ -73,29 +73,29 @@ class Mdl_Items extends MY_Model {
 
 		parent::save($db_array, $invoice_item_id);
 
-        if ($this->input->post('save_as_inventory')) {
+		if ($this->input->post('save_as_inventory') and $db_array['inventory_id'] == 'please_select') {
 
-            $db_array = array(
-                'inventory_name'        =>  $db_array['item_name'],
-                'inventory_unit_price'  =>  $db_array['item_price'],
-                'inventory_description' =>  $db_array['item_description']
-            );
+			$db_array = array(
+				'inventory_name'        =>  $db_array['item_name'],
+				'inventory_unit_price'  =>  $db_array['item_price'],
+				'inventory_description' =>  $db_array['item_description']
+			);
 
-            $this->db->insert('mcb_inventory', $db_array);
+			$this->db->insert('mcb_inventory', $db_array);
 
-        }
+		}
 
 	}
 
-    public function save_order($invoice_item_id, $item_order) {
+	public function save_order($invoice_item_id, $item_order) {
 
-        $this->db->where('invoice_item_id', $invoice_item_id);
+		$this->db->where('invoice_item_id', $invoice_item_id);
 
-        $this->db->set('item_order', $item_order);
+		$this->db->set('item_order', $item_order);
 
-        $this->db->update('mcb_invoice_items');
+		$this->db->update('mcb_invoice_items');
 
-    }
+	}
 
 	public function delete($invoice_item_id) {
 
@@ -104,7 +104,7 @@ class Mdl_Items extends MY_Model {
 		$this->db->delete(array('mcb_invoice_items', 'mcb_invoice_item_amounts'));
 
 		$this->session->set_flashdata('success_delete', TRUE);
-
+		
 	}
 
 }

@@ -108,7 +108,7 @@ class Invoice_Search extends Admin_Controller {
 			/* Add invoice id if provided */
 			if ($this->input->post('invoice_number')) {
 
-				$params['where'][] = "mcb_invoices.invoice_number LIKE '%" . $this->input->post('invoice_number') . "%'";
+				$params['like']['mcb_invoices.invoice_number'] = $this->input->post('invoice_number');
 
 			}
 

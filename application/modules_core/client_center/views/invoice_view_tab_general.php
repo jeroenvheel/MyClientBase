@@ -1,26 +1,30 @@
 <div class="left_box">
 
+	<?php if (!$is_quote) { ?>
 	<dl>
 		<dt><label><?php echo $this->lang->line('invoice_status'); ?>: </label></dt>
 		<dd><?php echo $invoice->invoice_status; ?></dd>
 	</dl>
+	<?php } ?>
 
 	<dl>
-		<dt><label><?php echo $this->lang->line('invoice_date'); ?>: </label></dt>
+		<dt><label><?php echo (!$is_quote) ? $this->lang->line('invoice_date') : $this->lang->line('date'); ?>: </label></dt>
 		<dd><?php echo format_date($invoice->invoice_date_entered); ?></dd>
 	</dl>
 
+	<?php if (!$is_quote) { ?>
 	<dl>
 		<dt><label><?php echo $this->lang->line('due_date'); ?>: </label></dt>
 		<dd><?php echo format_date($invoice->invoice_due_date); ?></dd>
 	</dl>
+	<?php } ?>
 
 	<dl>
 		<dt><label><?php echo $this->lang->line('client'); ?>: </label></dt>
 		<dd><?php echo $invoice->client_name; ?></dd>
 	</dl>
 
-
+	<?php if (!$is_quote) { ?>
 	<?php if ($invoice->invoice_is_overdue and $invoice->invoice_days_overdue > 0) { ?>
 	<dl>
 		<dt><label style="color: red; font-weight: bold;"><?php echo $this->lang->line('days_overdue'); ?>: </label></dt>
@@ -31,6 +35,7 @@
 		<dt><label><?php echo $this->lang->line('days_until_due'); ?>: </label></dt>
 		<dd><?php echo ($invoice->invoice_days_overdue * -1); ?></dd>
 	</dl>
+	<?php } ?>
 	<?php } ?>
 
 	<dl>
@@ -73,6 +78,7 @@
 		<dd><?php echo invoice_total($invoice); ?></dd>
 	</dl>
 
+	<?php if (!$is_quote) { ?>
 	<dl>
 		<dt><label><?php echo $this->lang->line('paid'); ?>: </label></dt>
 		<dd><?php echo invoice_paid($invoice); ?></dd>
@@ -82,6 +88,7 @@
 		<dt><label><?php echo $this->lang->line('invoice_balance'); ?>: </label></dt>
 		<dd><?php echo invoice_balance($invoice); ?></dd>
 	</dl>
+	<?php } ?>
 
 </div>
 

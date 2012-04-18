@@ -14,7 +14,7 @@
 
 	<div class="section_wrapper">
 
-		<h3 class="title_black"><?php echo $this->lang->line('invoice_number') . ' ' . $invoice->invoice_number; ?></h3>
+		<h3 class="title_black"><?php echo ((!$is_quote) ?  $this->lang->line('invoice_number') : $this->lang->line('quote_number')) . ' ' . $invoice->invoice_number; ?></h3>
 
 		<div class="content toggle">
 
@@ -22,7 +22,9 @@
 					<ul>
 						<li><a href="#tab_general"><?php echo $this->lang->line('summary'); ?></a></li>
 						<li><a href="#tab_items"><?php echo $this->lang->line('items'); ?></a></li>
+						<?php if (!$is_quote) { ?>
 						<li><a href="#tab_payments"><?php echo $this->lang->line('payments'); ?></a></li>
+						<?php } ?>
 						<li><a href="#tab_taxes"><?php echo $this->lang->line('tax_and_other'); ?></a></li>
 						<li><a href="#tab_notes"><?php echo $this->lang->line('notes'); ?></a></li>
 					</ul>
@@ -34,9 +36,11 @@
 						<?php $this->load->view('invoice_view_tab_items'); ?>
 					</div>
 
+					<?php if (!$is_quote) { ?>
 					<div id="tab_payments">
 						<?php $this->load->view('payment_table'); ?>
 					</div>
+					<?php } ?>
 
 					<div id="tab_taxes">
 						<?php $this->load->view('invoice_view_tab_taxes'); ?>

@@ -1,4 +1,4 @@
-<?php $this->load->view('dashboard/header'); ?>
+<?php $this->load->view('dashboard/header', array('header_insert'=>array('client_center/jquery_client_ac'))); ?>
 
 <div class="container_10" id="center_wrapper">
 
@@ -17,11 +17,8 @@
 				<dl>
 					<dt><label><?php echo $this->lang->line('client'); ?>: </label></dt>
 					<dd>
-						<select name="client_id">
-							<?php foreach ($clients as $client) { ?>
-							<option value="<?php echo $client->client_id; ?>" <?php if ($this->mdl_client_center->form_value('client_id') == $client->client_id) { ?>selected<?php } ?>><?php echo $client->client_name; ?></option>
-							<?php } ?>
-						</select>
+						<input type="text" id="client_id_autocomplete_label" name="client_id_autocomplete_label" value="<?php echo $this->mdl_client_center->form_value('client_id_autocomplete_label'); ?>" />
+						<input type="hidden" id="client_id_autocomplete_hidden" name="client_id" value="<?php echo $this->mdl_client_center->form_value('client_id'); ?>"/>
 					</dd>
 				</dl>
 
@@ -38,6 +35,11 @@
 				<dl>
 					<dt><label><?php echo $this->lang->line('password_verify'); ?>: </label></dt>
 					<dd><input type="password" name="passwordv" id="passwordv" /></dd>
+				</dl>
+
+				<dl>
+					<dt><label><?php echo $this->lang->line('email_address'); ?></label></dt>
+					<dd><input type="text" name="email_address" id="email" value="<?php echo $this->mdl_client_center->form_value('email_address'); ?>" /></dd>
 				</dl>
 
                 <div style="clear: both;">&nbsp;</div>

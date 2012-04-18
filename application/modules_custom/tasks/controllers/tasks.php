@@ -109,15 +109,13 @@ class Tasks extends Admin_Controller {
 
 			}
 
-			$this->load->module('invoices/invoice_api');
+			$this->load->module('invoices');
 
-			$this->invoice_api->display_create_invoice();
+			$this->invoices->display_create_invoice();
 
 		}
 
 		else {
-
-			$this->load->module('invoices/invoice_api');
 
 			$task_id = uri_assoc('task_id', 3);
 
@@ -165,7 +163,7 @@ class Tasks extends Admin_Controller {
 				'invoice_items'			=>	$invoice_items
 			);
 
-			$invoice_id = $this->invoice_api->create_invoice($package);
+			$invoice_id = $this->mdl_invoices->create_invoice($package);
 
 			$this->mdl_tasks->save_invoice_relation($invoice_id, $task_id);
 

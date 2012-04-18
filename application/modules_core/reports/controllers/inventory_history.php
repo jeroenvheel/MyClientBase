@@ -21,8 +21,10 @@ class Inventory_History extends Admin_Controller {
     public function jquery_display_results($output_type = 'view') {
         
         $this->load->model('inventory/mdl_inventory_stock');
+		
+		$params = array();
 
-        $query = $this->mdl_inventory_stock->query();
+        $query = $this->mdl_inventory_stock->query($params);
 
         if ($output_type == 'view') {
 

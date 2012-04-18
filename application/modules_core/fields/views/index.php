@@ -4,7 +4,11 @@
 
 	<div class="section_wrapper">
 
-		<h3 class="title_black"><?php echo $this->lang->line('custom_fields'); ?><?php $this->load->view('dashboard/btn_add'); ?></h3>
+		<h3 class="title_black"><?php echo $this->lang->line('custom_fields'); ?>
+			<span style="font-size: 60%;">
+				<?php $this->load->view('dashboard/btn_add'); ?>
+			</span>
+		</h3>
 
 		<?php $this->load->view('dashboard/system_messages'); ?>
 
@@ -46,6 +50,6 @@
 
 </div>
 
-<?php $this->load->view('dashboard/sidebar', array('side_block'=>array('fields/sidebar', 'settings/sidebar'),'hide_quicklinks'=>TRUE)); ?>
+<?php $this->load->view('dashboard/sidebar', array('side_block'=>array('fields/sidebar'))); ?>
 
 <?php $this->load->view('dashboard/footer'); ?>

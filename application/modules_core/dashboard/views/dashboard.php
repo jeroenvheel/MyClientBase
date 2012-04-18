@@ -10,11 +10,32 @@
 
 	<div class="section_wrapper">
 
-		<h3 class="title_black"><?php echo $this->lang->line('overdue_invoices'); ?><?php $this->load->view('dashboard/btn_add', array('btn_name'=>'btn_email_reminders', 'btn_value'=>$this->lang->line('email_reminders'))); ?></h3>
+		<h3 class="title_black"><?php echo $this->lang->line('overdue_invoices'); ?>
+		<span style="font-size: 60%;">
+		<?php $this->load->view('dashboard/btn_add', array('btn_name'=>'btn_email_reminders', 'btn_value'=>$this->lang->line('email_reminders'))); ?>
+		</span>
+		</h3>
 
 		<div class="content toggle no_padding">
 
-			<?php $this->load->view('invoices/invoice_table', array('invoices'=>$overdue_invoices)); ?>
+			<?php echo modules::run('invoices/display_invoice_table', $overdue_invoices); ?>
+
+		</div>
+
+	</div>
+
+	<?php } ?>
+
+	<?php if ($this->mdl_mcb_data->setting('dashboard_show_quotes') == "TRUE") { ?>
+
+	<div class="section_wrapper">
+
+		<h3 class="title_black"><?php echo $this->lang->line('quotes'); ?></h3>
+
+		<div class="content toggle no_padding">
+
+			<?php echo modules::run('invoices/display_invoice_table', $quotes, TRUE); ?>
+			
 
 		</div>
 
@@ -30,7 +51,7 @@
 
 		<div class="content toggle no_padding">
 
-			<?php $this->load->view('invoices/invoice_table', array('invoices'=>$open_invoices)); ?>
+			<?php echo modules::run('invoices/display_invoice_table', $open_invoices); ?>
 
 		</div>
 
@@ -46,7 +67,7 @@
 
 		<div class="content toggle no_padding">
 
-			<?php $this->load->view('invoices/invoice_table', array('invoices'=>$pending_invoices)); ?>
+			<?php echo modules::run('invoices/display_invoice_table', $pending_invoices); ?>
 
 		</div>
 
@@ -62,7 +83,7 @@
 
 		<div class="content toggle no_padding">
 
-			<?php $this->load->view('invoices/invoice_table', array('invoices'=>$closed_invoices)); ?>
+			<?php echo modules::run('invoices/display_invoice_table', $closed_invoices); ?>
 
 		</div>
 
@@ -74,9 +95,13 @@
 
 </div>
 
-<?php $this->load->view('dashboard/sidebar',
-	array('side_block'=>array('dashboard/sidebar_custom_modules'),
-	'show_quicklinks'=>TRUE,
-	'side_widgets'=>array('dashboard/dashboard_widgets/total_balance', 'dashboard/dashboard_widgets/total_paid'))); ?>
+<?php
+$this->load->view('dashboard/sidebar',
+	array(
+	'side_widgets'=>array(
+		'dashboard/dashboard_widgets/total_balance',
+		'dashboard/dashboard_widgets/total_paid'
+	)));
+?>
 
 <?php $this->load->view('dashboard/footer'); ?>

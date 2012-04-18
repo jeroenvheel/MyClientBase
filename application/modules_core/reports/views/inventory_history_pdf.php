@@ -1,25 +1,17 @@
-<?php $this->load->view('css'); ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<h1><?php echo $this->lang->line('inventory_history'); ?></h1>
+		<?php $this->load->view('css'); ?>
 
-<table style="width: 100%;">
+	</head>
+	<body>
+		
+		<h1><?php echo $this->lang->line('inventory_history'); ?></h1>
 
-    <tr>
-        <th style="width: 15%;"><?php echo $this->lang->line('date'); ?></th>
-        <th style="width: 30%;"><?php echo $this->lang->line('item'); ?></th>
-        <th style="width: 15%;"><?php echo $this->lang->line('quantity'); ?></th>
-        <th style="width: 40%;"><?php echo $this->lang->line('notes'); ?></th>
-    </tr>
+		<?php $this->load->view('inventory_history_view'); ?>
 
-    <?php foreach ($inventory_history as $history) { ?>
-
-    <tr>
-        <td class="first"><?php echo format_date($history->inventory_stock_date); ?></td>
-        <td><?php echo $history->inventory_name; ?></td>
-        <td><?php echo $history->inventory_stock_quantity; ?></td>
-        <td><?php echo $history->inventory_stock_notes; ?></td>
-    </tr>
-
-        <?php } ?>
-
-</table>
+	</body>
+</html>

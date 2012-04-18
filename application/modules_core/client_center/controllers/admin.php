@@ -32,8 +32,6 @@ class Admin extends Admin_Controller {
 
 		if (!$this->mdl_client_center->validate()) {
 
-			$this->load->helper('form');
-
 			if (!$_POST AND uri_assoc('user_id', 4)) {
 
 				$this->mdl_client_center->prep_validation(uri_assoc('user_id', 4));
@@ -42,11 +40,7 @@ class Admin extends Admin_Controller {
 
 			$this->load->model('clients/mdl_clients');
 
-			$data = array(
-				'clients'	=>	$this->mdl_clients->get()
-			);
-
-			$this->load->view('admin_form', $data);
+			$this->load->view('admin_form');
 
 		}
 

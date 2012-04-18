@@ -2,19 +2,24 @@
 
 class Client_Center extends Client_Center_Controller {
 
-	function __construct() {
+	public function __construct() {
 
 		parent::__construct('client_id');
 
-		$this->load->model('invoices/mdl_invoices');
+		$this->load->model(
+			array(
+			'invoices/mdl_invoices',
+			'mdl_client_center'
+			)
+		);
 
-		$this->load->model('mdl_client_center');
+		$this->load->library('invoices/lib_output');
 
 		$this->load->helper('text');
 
 	}
 
-	function index() {
+	public function index() {
 
 		$params = array(
 			'open'		=> array(
@@ -57,7 +62,7 @@ class Client_Center extends Client_Center_Controller {
 
 	}
 
-	function invoices() {
+	public function invoices() {
 
 		$params = array(
 			'limit'		=>	25,
@@ -78,42 +83,63 @@ class Client_Center extends Client_Center_Controller {
 
 	}
 
-	function view_invoice() {
+	public function quotes() {
+
+		$params = array(
+			'limit'		=>	25,
+			'paginate'	=>	TRUE,
+			'page'		=>	uri_assoc('page', 4),
+			'where'		=>	array(
+				'mcb_invoices.client_id'		=>	$this->session->userdata('client_id'),
+				'mcb_invoices.invoice_is_quote'	=>	1
+			),
+			'set_client'	=>	TRUE
+		);
+
+		$data = array(
+			'quotes'	=>	$this->mdl_invoices->get($params)
+		);
+
+		$this->load->view('quotes', $data);
+
+	}
+
+	public function view_invoice() {
 
 		$params = array(
 			'where'	=>	array(
 				'mcb_invoices.invoice_id'		=>	uri_assoc('invoice_id'),
-				'mcb_invoices.client_id'		=>	$this->session->userdata('client_id'),
-				'mcb_invoices.invoice_is_quote'	=>	0
+				'mcb_invoices.client_id'		=>	$this->session->userdata('client_id')
 			)
 		);
 
-        $invoice = $this->mdl_invoices->get($params);
+		$invoice = $this->mdl_invoices->get($params);
 
-        $invoice_items = $this->mdl_invoices->get_invoice_items($invoice->invoice_id);
-
-        $invoice_tax_rates = $this->mdl_invoices->get_invoice_tax_rates($invoice->invoice_id);
-
-        $invoice_payments = $this->mdl_invoices->get_invoice_payments($invoice->invoice_id);
-
-		$data = array(
-			'invoice'           =>	$invoice,
-            'invoice_items'     =>  $invoice_items,
-            'invoice_tax_rates' =>  $invoice_tax_rates,
-            'invoice_payments'  =>  $invoice_payments
-		);
-
-		if (!$data['invoice']) {
+		if (!$invoice) {
 
 			redirect('client_center');
 
 		}
+
+		$invoice_items = $this->mdl_invoices->get_invoice_items($invoice->invoice_id);
+
+		$invoice_tax_rates = $this->mdl_invoices->get_invoice_tax_rates($invoice->invoice_id);
+
+		$invoice_payments = $this->mdl_invoices->get_invoice_payments($invoice->invoice_id);
+
+		$data = array(
+			'invoice'           =>	$invoice,
+			'invoice_items'     =>  $invoice_items,
+			'invoice_tax_rates' =>  $invoice_tax_rates,
+			'invoice_payments'  =>  $invoice_payments,
+			'is_quote'			=>	$invoice->invoice_is_quote
+		);
 
 		$this->load->view('invoice_view', $data);
 
 	}
 
-	function generate_pdf() {
+	public function generate_pdf() {
 
 		$invoice_id = uri_assoc('invoice_id');
 
@@ -123,15 +149,15 @@ class Client_Center extends Client_Center_Controller {
 
 		}
 
-		$this->load->library('invoices/lib_output');
+		$this->load->model('invoices/mdl_invoice_history');
 
-        $this->mdl_invoices->save_invoice_history($invoice_id, $this->session->userdata('user_id'), $this->lang->line('client_generated_invoice_pdf'));
+		$this->mdl_invoice_history->save($invoice_id, $this->session->userdata('user_id'), $this->lang->line('client_generated_invoice_pdf'));
 
 		$this->lib_output->pdf($invoice_id, $this->_get_invoice_template());
 
 	}
 
-	function generate_html() {
+	public function generate_html() {
 
 		$invoice_id = uri_assoc('invoice_id');
 
@@ -141,29 +167,41 @@ class Client_Center extends Client_Center_Controller {
 
 		}
 
-		$this->load->library('invoices/lib_output');
+		$this->load->model('invoices/mdl_invoice_history');
 
-		$this->mdl_invoices->save_invoice_history($invoice_id, $this->session->userdata('user_id'), $this->lang->line('client_generated_invoice_html'));
+		$this->mdl_invoice_history->save($invoice_id, $this->session->userdata('user_id'), $this->lang->line('client_generated_invoice_html'));
 
 		$this->lib_output->html($invoice_id, $this->_get_invoice_template());
 
 	}
 
-    function _get_invoice_template() {
+	public function _get_invoice_template() {
 
-        $this->load->model('mcb_data/mdl_mcb_client_data');
+		$this->load->model('mcb_data/mdl_mcb_client_data');
 
-        $invoice_template = $this->mdl_mcb_client_data->get($this->session->userdata('client_id'), 'default_invoice_template');
+		$invoice_template = $this->mdl_mcb_client_data->get($this->session->userdata('client_id'), 'default_invoice_template');
 
-        if (!$invoice_template) {
+		if (!$invoice_template) {
 
-            $invoice_template = $this->mdl_mcb_data->setting('default_invoice_template');
+			$invoice_template = $this->mdl_mcb_data->setting('default_invoice_template');
 
-        }
+		}
 
-        return $invoice_template;
+		return $invoice_template;
 
-    }
+	}
+
+	public function merchant_return() {
+
+		$this->load->view('merchant_return');
+
+	}
+
+	public function merchant_cancel() {
+
+		$this->load->view('merchant_cancel');
+
+	}
 
 }
 

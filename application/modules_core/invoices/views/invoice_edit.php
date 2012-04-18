@@ -1,4 +1,4 @@
-<?php $this->load->view('dashboard/header', array('header_insert'=>'invoices/invoice_edit_header')); ?>
+<?php $this->load->view('dashboard/header', array('header_insert'=>array('invoices/invoice_edit_header'))); ?>
 
 <?php echo modules::run('invoices/widgets/generate_dialog'); ?>
 
@@ -24,12 +24,15 @@
 
 		<h3 class="title_black"><?php echo ($invoice->invoice_is_quote == 1 ? $this->lang->line('quote_number') : $this->lang->line('invoice_number')) . ' ' . $invoice->invoice_number; ?>
 
+			<span style="font-size: 60%;">
 			<?php if (!$invoice->invoice_is_quote) { ?>
-			<input type="submit" name="btn_add_payment" style="float: right; margin-top: 10px; margin-right: 10px;" value="<?php echo $this->lang->line('enter_payment'); ?>" />
+			<input type="submit" name="btn_add_payment" class="uibutton" style="float: right; margin-top: 10px; margin-right: 10px;" value="<?php echo $this->lang->line('enter_payment'); ?>" />
 			<?php } else { ?>
-			<input type="submit" name="btn_quote_to_invoice" style="float: right; margin-top: 10px; margin-right: 10px;" value="<?php echo $this->lang->line('quote_to_invoice'); ?>" />
+			<input type="submit" name="btn_quote_to_invoice" class="uibutton" style="float: right; margin-top: 10px; margin-right: 10px;" value="<?php echo $this->lang->line('quote_to_invoice'); ?>" />
 			<?php } ?>
-			<input type="submit" name="btn_add_new_item" style="float: right; margin-top: 10px; margin-right: 10px;" value="<?php echo $this->lang->line('add_invoice_item'); ?>" />
+			<input type="submit" name="btn_add_new_item" class="uibutton" style="float: right; margin-top: 10px; margin-right: 10px;" value="<?php echo $this->lang->line('add_invoice_item'); ?>" />
+            <input type="submit" name="btn_copy_invoice" class="uibutton" style="float: right; margin-top: 10px; margin-right: 10px;" value="<?php echo $this->lang->line('copy'); ?>" />
+			</span>
 			
 		</h3>
 

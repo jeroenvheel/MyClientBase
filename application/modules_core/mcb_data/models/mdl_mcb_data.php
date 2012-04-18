@@ -26,9 +26,9 @@ class Mdl_MCB_Data extends MY_Model {
 
 	}
 
-	public function save($key, $value) {
+	public function save($key, $value, $only_if_null = FALSE) {
 
-		if (!is_null($this->get($key))) {
+		if (!is_null($this->get($key)) and !$only_if_null) {
 
 			$this->db->where('mcb_key', $key);
 
@@ -41,6 +41,16 @@ class Mdl_MCB_Data extends MY_Model {
 		}
 
 		else {
+
+			if ($only_if_null) {
+
+				if (!is_null($this->get($key))) {
+
+					return;
+
+				}
+
+			}
 
 			$db_array = array(
 				'mcb_key'	=>	$key,

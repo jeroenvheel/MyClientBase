@@ -1,6 +1,6 @@
 <div class="section_wrapper">
 
-	<h3 class="title_white"><?php echo $this->lang->line('inventory'); ?></h3>
+	<h3 class="title_black"><?php echo $this->lang->line('inventory'); ?></h3>
 
 	<ul class="quicklinks content toggle">
 		<li><?php echo anchor('inventory', $this->lang->line('inventory_items')); ?></li>

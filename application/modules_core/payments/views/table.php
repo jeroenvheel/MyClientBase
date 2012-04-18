@@ -1,18 +1,18 @@
 <table style="width: 100%;">
     <tr>
 		<?php if (isset($sort_links) AND $sort_links == TRUE) { ?>
-			<th scope="col" class="first"><?php echo anchor('payments/index/order_by/payment_id', $this->lang->line('id')); ?></th>
-			<th scope="col"><?php echo anchor('payments/index/order_by/date', $this->lang->line('date')); ?></th>
-			<th scope="col"><?php echo anchor('payments/index/order_by/invoice_id', $this->lang->line('invoice_number')); ?></th>
-			<th scope="col"><?php echo anchor('payments/index/order_by/client', $this->lang->line('client')); ?></th>
-			<th scope="col"><?php echo anchor('payments/index/order_by/amount', $this->lang->line('amount')); ?></th>
+			<th scope="col" class="first"><?php echo $table_headers['payment_id']; ?></th>
+			<th scope="col"><?php echo $table_headers['date']; ?></th>
+			<th scope="col"><?php echo $table_headers['invoice_id']; ?></th>
+			<th scope="col"><?php echo $table_headers['client']; ?></th>
+			<th scope="col" class="col_amount"><?php echo $table_headers['amount']; ?></th>
 			<th scope="col" class="last"><?php echo $this->lang->line('actions'); ?></th>
 		<?php } else { ?>
 			<th scope="col" class="first"><?php echo $this->lang->line('id'); ?></th>
 			<th scope="col"><?php echo $this->lang->line('date'); ?></th>
 			<th scope="col"><?php echo $this->lang->line('invoice_number'); ?></th>
 			<th scope="col"><?php echo $this->lang->line('client'); ?></th>
-			<th scope="col"><?php echo $this->lang->line('amount'); ?></th>
+			<th scope="col" class="col_amount"><?php echo $this->lang->line('amount'); ?></th>
 			<th scope="col" class="last"><?php echo $this->lang->line('actions'); ?></th>
 		<?php } ?>
 	</tr>
@@ -22,8 +22,8 @@
 				<td class="first"><?php echo $payment->payment_id; ?></td>
 				<td><?php echo format_date($payment->payment_date); ?></td>
 				<td><?php echo $payment->invoice_number; ?></td>
-				<td><?php echo anchor('clients/details/client_id/' . $payment->client_id, $payment->client_name); ?></td>
-				<td><?php echo display_currency($payment->payment_amount); ?></td>
+				<td><?php echo anchor('clients/form/client_id/' . $payment->client_id, $payment->client_name); ?></td>
+				<td class="col_amount"><?php echo display_currency($payment->payment_amount); ?></td>
 				<td class="last">
 					<a href="<?php echo site_url('payments/form/invoice_id/' . $payment->invoice_id . '/payment_id/' . $payment->payment_id); ?>" title="<?php echo $this->lang->line('edit'); ?>">
 						<?php echo icon('edit'); ?>

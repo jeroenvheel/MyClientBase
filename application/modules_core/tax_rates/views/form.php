@@ -13,12 +13,12 @@
 			<form method="post" action="<?php echo site_url($this->uri->uri_string()); ?>">
 
 				<dl>
-					<dt><label><?php echo $this->lang->line('tax_rate_name'); ?>: </label></dt>
+					<dt><label>* <?php echo $this->lang->line('tax_rate_name'); ?>: </label></dt>
 					<dd><input type="text" name="tax_rate_name" id="tax_rate_name" value="<?php echo $this->mdl_tax_rates->form_value('tax_rate_name'); ?>" /></dd>
 				</dl>
 
 				<dl>
-					<dt><label><?php echo $this->lang->line('tax_rate_percent'); ?>: </label></dt>
+					<dt><label>* <?php echo $this->lang->line('tax_rate_percent'); ?>: </label></dt>
 					<dd><input type="text" name="tax_rate_percent" id="tax_rate_symbol" value="<?php echo $this->mdl_tax_rates->form_value('tax_rate_percent'); ?>" /></dd>
 				</dl>
 

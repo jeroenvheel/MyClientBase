@@ -95,7 +95,7 @@ class Mdl_Tasks extends MY_Model {
 
 			}
 
-			$this->mdl_invoices->add_invoice_item($invoice_id, $task->title, $task->description, 1, 0);
+			$this->mdl_invoices->save_invoice_item($invoice_id, $task->title, $task->description, 1, 0);
 
 			$db_array = array(
 				'task_id'		=>	$task->task_id,

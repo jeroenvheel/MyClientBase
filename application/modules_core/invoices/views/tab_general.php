@@ -1,22 +1,19 @@
 <div class="left_box">
 
     <dl>
-        <dt><label><?php echo $this->lang->line('invoice_number'); ?>: </label></dt>
+        <dt><label>
+        <?php if (!$invoice->invoice_is_quote) { 
+                echo $this->lang->line('invoice_number'); 
+            } else { echo $this->lang->line('quote_number'); }   ?>: </label></dt>
+            
         <dd><input type="text" name="invoice_number" value="<?php echo $invoice->invoice_number; ?>" /></dd>
     </dl>
 
 	<dl>
 		<dt><label><?php echo $this->lang->line('client'); ?>: </label></dt>
 		<dd>
-			<?php if ($invoice->client_active) { ?>
-			<select name="client_id">
-				<?php foreach ($clients as $client) { ?>
-				<option value="<?php echo $client->client_id; ?>" <?php if($invoice->client_id == $client->client_id) { ?>selected="selected"<?php } ?>><?php echo character_limiter($client->client_name, 25); ?></option>
-					<?php } ?>
-			</select>
-			<?php } else { ?>
 			<?php echo $invoice->client_name; ?>
-			<?php } ?>
+			<input type="hidden" name="client_id" value="<?php echo $invoice->client_id; ?>" />
 		</dd>
 	</dl>
 

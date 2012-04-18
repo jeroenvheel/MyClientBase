@@ -33,38 +33,28 @@
 				</dl>
 
 				<dl>
-					<dt><label><?php echo $this->lang->line('item_date'); ?>: </label></dt>
+					<dt><label>* <?php echo $this->lang->line('item_date'); ?>: </label></dt>
 					<dd><input class="datepicker" type="text" name="item_date" id="item_date" value="<?php echo $this->mdl_items->form_value('item_date'); ?>" /></dd>
 				</dl>
 
 				<dl>
-					<dt><label><?php echo $this->lang->line('quantity'); ?>: </label></dt>
+					<dt><label>* <?php echo $this->lang->line('quantity'); ?>: </label></dt>
 					<dd><input type="text" name="item_qty" id="item_qty" value="<?php echo format_qty($this->mdl_items->form_value('item_qty')); ?>" /></dd>
 				</dl>
 
 				<dl>
-					<dt><label><?php echo $this->lang->line('item_name'); ?>: </label></dt>
+					<dt><label>* <?php echo $this->lang->line('item_name'); ?>: </label></dt>
 					<dd><input type="text" name="item_name" id="item_name" value="<?php echo $this->mdl_items->form_value('item_name'); ?>" /></dd>
+				</dl>
+
+				<dl>
+					<dt><label>* <?php echo $this->lang->line('unit_price'); ?>: </label></dt>
+					<dd><input type="text" name="item_price" id="item_price" value="<?php if($this->mdl_items->form_value('item_price')) { echo format_number($this->mdl_items->form_value('item_price')); } ?>" /></dd>
 				</dl>
 				
 				<dl>
 					<dt><label><?php echo $this->lang->line('item_description'); ?>: </label></dt>
 					<dd><textarea name="item_description" id="item_description" rows="5" cols="40"><?php echo $this->mdl_items->form_value('item_description'); ?></textarea></dd>
-				</dl>
-				
-				<dl>
-					<dt><label><?php echo $this->lang->line('unit_price'); ?>: </label></dt>
-					<dd><input type="text" name="item_price" id="item_price" value="<?php if($this->mdl_items->form_value('item_price')) { echo format_number($this->mdl_items->form_value('item_price')); } ?>" /></dd>
-				</dl>
-
-                <dl>
-                    <dt><label><?php echo $this->lang->line('save_as_inventory'); ?>: </label></dt>
-                    <dd><input type="checkbox" name="save_as_inventory" id="save_as_inventory" value="1" <?php if ($this->input->post('save_as_inventory')) { ?>checked="checked"<?php } ?>/></dd>
-                </dl>
-
-				<dl>
-					<dt><label><?php echo $this->lang->line('apply_invoice_tax'); ?>: </label></dt>
-					<dd><input type="checkbox" name="is_taxable" id="is_taxable" value="1" <?php if ($this->mdl_items->form_value('is_taxable')) { ?>checked="checked"<?php } ?> /></dd>
 				</dl>
 
 				<dl>
@@ -72,20 +62,24 @@
 					<dd>
 						<select name="tax_rate_id" id="tax_rate_id">
 							<?php foreach ($tax_rates as $tax_rate) { ?>
-							<option value="<?php echo $tax_rate->tax_rate_id; ?>" <?php if(($this->mdl_items->form_value('item_tax_rate_id') and $this->mdl_items->form_value('item_tax_rate_id') == $tax_rate->tax_rate_id) or (!$this->mdl_items->form_value('item_tax_rate_id') and $this->mdl_mcb_data->setting('default_item_tax_rate_id') == $tax_rate->tax_rate_id)) { ?>selected="selected"<?php } ?>><?php echo $tax_rate->tax_rate_percent . '% - ' . $tax_rate->tax_rate_name; ?></option>
+							<option value="<?php echo $tax_rate->tax_rate_id; ?>" <?php if(($this->mdl_items->form_value('tax_rate_id') == $tax_rate->tax_rate_id)) { ?>selected="selected"<?php } ?>><?php echo format_number($tax_rate->tax_rate_percent, TRUE, $this->mdl_mcb_data->setting('decimal_taxes_num')) . '% - ' . $tax_rate->tax_rate_name; ?></option>
 							<?php } ?>
 						</select>
+                        <select name="item_tax_option" id="item_tax_option">
+                            <option value="0" <?php if ($this->mdl_items->form_value('item_tax_option') == "0") { ?>selected="selected"<?php } ?>><?php echo $this->lang->line('item_tax_option_0'); ?></option>
+                            <option value="1" <?php if ($this->mdl_items->form_value('item_tax_option') == "1") { ?>selected="selected"<?php } ?>><?php echo $this->lang->line('item_tax_option_1'); ?></option>
+                        </select>
 					</dd>
 				</dl>
-
-                <dl>
-                    <dt><label><?php echo $this->lang->line('item_tax_option'); ?></label></dt>
-                    <dd>
-                        <select name="item_tax_option" id="item_tax_option">
-                            <option value="0" <?php if (!$this->mdl_items->form_value('item_tax_option')) { ?>selected="selected"<?php } ?>><?php echo $this->lang->line('item_tax_option_0'); ?></option>
-                            <option value="1" <?php if ($this->mdl_items->form_value('item_tax_option') == 1) { ?>selected="selected"<?php } ?>><?php echo $this->lang->line('item_tax_option_1'); ?></option>
-                        </select>
-                    </dd>
+                
+				<dl>
+					<dt><label><?php echo $this->lang->line('apply_invoice_tax'); ?>: </label></dt>
+					<dd><input type="checkbox" name="is_taxable" id="is_taxable" value="1" <?php if ((!uri_assoc('invoice_item_id', 4) and $this->mdl_mcb_data->setting('default_apply_invoice_tax')) or $this->mdl_items->form_value('is_taxable')) { ?>checked="checked"<?php } ?> /></dd>
+				</dl>
+                
+                <dl id="dl_save_as_inventory">
+                    <dt><label><?php echo $this->lang->line('save_as_inventory'); ?>: </label></dt>
+                    <dd><input type="checkbox" name="save_as_inventory" id="save_as_inventory" value="1" <?php if ($this->input->post('save_as_inventory')) { ?>checked="checked"<?php } ?>/></dd>
                 </dl>
 
 				<?php foreach ($custom_fields as $field) { ?>

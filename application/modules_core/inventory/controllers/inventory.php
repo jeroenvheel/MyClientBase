@@ -15,17 +15,44 @@ class Inventory extends Admin_Controller {
     public function index() {
 
         $this->redir->set_last_index();
+        $this->load->model('mdl_inventory_table');
 
         $params = array(
             'paginate'	=>	TRUE,
             'page'		=>	uri_assoc('page'),
-            'order_by'	=>	'inventory_name'
         );
+
+        $order_by = uri_assoc('order_by');
+
+        $order = uri_assoc('order');
+
+	switch ($order_by) {
+
+		case 'inventory_id':
+		    $params['order_by'] = 'inventory_id ' . $order;
+		    break;
+		case 'inventory_type':
+		    $params['order_by'] = 'inventory_type ' . $order;
+		    break;
+		case 'inventory_item':
+		    $params['order_by'] = 'inventory_name ' . $order;
+		    break;
+		case 'inventory_stock':
+		    $params['order_by'] = 'inventory_stock ' . $order;
+		    break;
+		case 'inventory_price':
+		    $params['order_by'] = 'inventory_unit_price ' . $order;
+		    break;
+		default:
+		    $params['order_by'] = 'inventory_name ' . $order;
+
+	}
 
         $items = $this->mdl_inventory->get($params);
 
         $data = array(
-            'items'	=>	$items
+            'items'			=>	$items,
+            'table_headers'	=>	$this->mdl_inventory_table->get_table_headers()
         );
 
         $this->load->view('index', $data);
@@ -34,15 +61,20 @@ class Inventory extends Admin_Controller {
 
     public function form() {
 
+        if($this->session->flashdata('page'))
+        {
+            $this->session->set_flashdata('page', $this->session->flashdata('page'));            
+        }
+        
+	    $inventory_id = uri_assoc('inventory_id');
+
         if (!$this->mdl_inventory->validate()) {
 
             $this->load->model(array('mdl_inventory_types', 'tax_rates/mdl_tax_rates'));
 
-            $this->load->helper('form');
+            if (!$_POST AND $inventory_id) {
 
-            if (!$_POST AND uri_assoc('inventory_id')) {
-
-                $this->mdl_inventory->prep_validation(uri_assoc('inventory_id'));
+                $this->mdl_inventory->prep_validation($inventory_id);
 
             }
 
@@ -57,7 +89,13 @@ class Inventory extends Admin_Controller {
 
         else {
 
-            $this->mdl_inventory->save($this->mdl_inventory->db_array(), uri_assoc('inventory_id'));
+			if (!$inventory_id) {
+
+				$this->load->model('mdl_inventory_stock');
+
+			}
+
+            $this->mdl_inventory->save($this->mdl_inventory->db_array(), $inventory_id, $this->input->post('initial_stock_quantity'));
 
             $this->redir->redirect('inventory');
 
@@ -93,7 +131,7 @@ class Inventory extends Admin_Controller {
             'item_name'			=>	$item->inventory_name,
             'item_cost'			=>	format_number($item->inventory_unit_price, FALSE),
             'item_description'	=>	$item->inventory_description,
-            'tax_rate_id'       =>  $item->tax_rate_id
+            'tax_rate_id'       =>  $item->inventory_tax_rate_id
         );
 
         echo json_encode($array);
@@ -106,7 +144,7 @@ class Inventory extends Admin_Controller {
 
         $inventory_id = $this->input->post('inventory_id');
 
-        $inventory_stock_quantity = $this->input->post('inventory_stock_quantity');
+        $inventory_stock_quantity = standardize_number($this->input->post('inventory_stock_quantity'));
 
         $inventory_stock_notes = $this->input->post('inventory_stock_notes');
 
@@ -126,26 +164,29 @@ class Inventory extends Admin_Controller {
 
         $inventory = $this->mdl_inventory->get($params);
 
-        echo $inventory->inventory_stock;
+        echo format_number($inventory->inventory_stock, FALSE);
 
     }
 
     public function _post_handler() {
 
         if ($this->input->post('btn_add')) {
-
+            
+            if(uri_assoc('page'))
+            {
+                $this->session->set_flashdata('page', uri_assoc('page'));    
+            }            
             redirect('inventory/form');
-
         }
 
-        if ($this->input->post('btn_cancel')) {
-
-            redirect('inventory/index');
-
+        if ($this->input->post('btn_cancel')) {            
+            if($this->session->flashdata('page'))
+            {
+                redirect('inventory/index/page/'.$this->session->flashdata('page'));
+            }
+            else
+                redirect('inventory/index');
         }
-
     }
-
 }
-
 ?>

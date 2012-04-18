@@ -4,7 +4,11 @@
 
 	<div class="section_wrapper">
 
-		<h3 class="title_black"><?php echo $this->lang->line('client_center'); ?><?php $this->load->view('dashboard/btn_add', array('btn_name'=>'btn_add_account', 'btn_value'=>$this->lang->line('create_account'))); ?></h3>
+		<h3 class="title_black"><?php echo $this->lang->line('client_center'); ?>
+			<span style="font-size: 60%;">
+				<?php $this->load->view('dashboard/btn_add', array('btn_name'=>'btn_add_account', 'btn_value'=>$this->lang->line('create_account'))); ?>
+			</span>
+		</h3>
 
 		<?php $this->load->view('dashboard/system_messages'); ?>
 

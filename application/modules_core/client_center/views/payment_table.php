@@ -10,7 +10,7 @@
 		<tr>
 			<td class="first"><?php echo $payment->payment_id; ?></td>
 			<td><?php echo $payment->invoice_id; ?></td>
-			<td><?php echo anchor('clients/details/client_id/' . $payment->client_id, $payment->client_name); ?></td>
+			<td><?php echo anchor('clients/form/client_id/' . $payment->client_id, $payment->client_name); ?></td>
 			<td><?php echo format_date($payment->payment_date); ?></td>
 			<td class="last"><?php echo display_currency($payment->payment_amount); ?></td>
 		</tr>

@@ -68,6 +68,7 @@ class Invoice_Settings extends Admin_Controller {
 		$this->mdl_mcb_data->save('default_tax_rate_id', $this->input->post('default_tax_rate_id'));
         $this->mdl_mcb_data->save('default_tax_rate_option', $this->input->post('default_tax_rate_option'));
 		$this->mdl_mcb_data->save('default_item_tax_rate_id', $this->input->post('default_item_tax_rate_id'));
+		$this->mdl_mcb_data->save('default_item_tax_option', $this->input->post('default_item_tax_option'));
 		$this->mdl_mcb_data->save('default_invoice_template', $this->input->post('default_invoice_template'));
 		$this->mdl_mcb_data->save('default_quote_template', $this->input->post('default_quote_template'));
 		$this->mdl_mcb_data->save('invoices_due_after', $this->input->post('invoices_due_after'));
@@ -116,6 +117,18 @@ class Invoice_Settings extends Admin_Controller {
 		else {
 
 			$this->mdl_mcb_data->save('disable_invoice_audit_history', 0);
+
+		}
+
+		if ($this->input->post('default_apply_invoice_tax')) {
+
+			$this->mdl_mcb_data->save('default_apply_invoice_tax', 1);
+
+		}
+
+		else  {
+
+			$this->mdl_mcb_data->save('default_apply_invoice_tax', 0);
 
 		}
 

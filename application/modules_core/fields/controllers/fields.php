@@ -29,8 +29,6 @@ class Fields extends Admin_Controller {
 
 		if (!$this->mdl_fields->validate()) {
 
-			$this->load->helper('form');
-
 			if (!$_POST AND $field_id) {
 
 				$this->mdl_fields->prep_validation($field_id);

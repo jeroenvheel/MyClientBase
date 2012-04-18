@@ -13,7 +13,7 @@
 			<form method="post" action="<?php echo site_url($this->uri->uri_string()); ?>">
 
 				<dl>
-					<dt><label><?php echo $this->lang->line('inventory_type'); ?>: </label></dt>
+					<dt><label>* <?php echo $this->lang->line('inventory_type'); ?>: </label></dt>
 					<dd><input type="text" name="inventory_type" id="inventory_type" value="<?php echo $this->mdl_inventory_types->form_value('inventory_type'); ?>" /></dd>
 				</dl>
 

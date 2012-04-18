@@ -13,11 +13,11 @@
             <form method="post" action="<?php echo site_url($this->uri->uri_string()); ?>">
 
                 <dl>
-                    <dt><label><?php echo $this->lang->line('invoice_status'); ?>: </label></dt>
+                    <dt><label>* <?php echo $this->lang->line('invoice_status'); ?>: </label></dt>
                     <dd><input type="text" name="invoice_status" id="invoice_status" value="<?php echo $this->mdl_invoice_statuses->form_value('invoice_status'); ?>" /></dd>
                 </dl>
                 <dl>
-                    <dt><label><?php echo $this->lang->line('invoice_status_type'); ?>: </label></dt>
+                    <dt><label>* <?php echo $this->lang->line('invoice_status_type'); ?>: </label></dt>
                     <dd>
                         <select name="invoice_status_type">
                         <?php foreach ($this->mdl_invoice_statuses->status_types as $key=>$value) { ?>

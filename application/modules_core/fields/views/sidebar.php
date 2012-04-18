@@ -1,6 +1,6 @@
 <div class="section_wrapper">
 
-	<h3 class="title_white"><?php echo $this->lang->line('custom_fields'); ?></h3>
+	<h3 class="title_black"><?php echo $this->lang->line('custom_fields'); ?></h3>
 
 	<ul class="quicklinks content toggle">
 		<li><?php echo anchor('fields', $this->lang->line('view_custom_fields')); ?></li>

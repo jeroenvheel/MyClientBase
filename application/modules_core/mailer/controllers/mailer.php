@@ -4,6 +4,8 @@ class Mailer extends Admin_Controller {
 
 	function display_settings() {
 
+		$this->load->model('email_templates/mdl_email_templates');
+
 		$security_options = array(
 			'none'	=>	$this->lang->line('none'),
 			'tls'	=>	'TLS',
@@ -11,7 +13,8 @@ class Mailer extends Admin_Controller {
 		);
 
 		$data = array(
-			'security_options'	=>	$security_options
+			'security_options'	=>	$security_options,
+			'email_templates'	=>	$this->mdl_email_templates->get_list()
 		);
 
 		$this->load->view('mailer/settings', $data);

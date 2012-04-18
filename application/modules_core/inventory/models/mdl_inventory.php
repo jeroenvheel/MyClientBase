@@ -10,7 +10,7 @@ class Mdl_Inventory extends MY_Model {
 
 		$this->primary_key = 'mcb_inventory.inventory_id';
 
-		$this->select_fields = 'SQL_CALC_FOUND_ROWS *,
+		$this->select_fields = 'SQL_CALC_FOUND_ROWS mcb_inventory.*, mcb_inventory_types.*,
             IFNULL((SELECT SUM(inventory_stock_quantity) FROM mcb_inventory_stock WHERE mcb_inventory_stock.inventory_id = mcb_inventory.inventory_id), 0) AS inventory_stock';
 
         $this->joins = array(
@@ -53,7 +53,7 @@ class Mdl_Inventory extends MY_Model {
 		$this->form_validation->set_rules('inventory_name', $this->lang->line('item_name'), 'required');
 		$this->form_validation->set_rules('inventory_description', $this->lang->line('item_description'));
 		$this->form_validation->set_rules('inventory_unit_price', $this->lang->line('unit_price'), 'required');
-        $this->form_validation->set_rules('tax_rate_id', $this->lang->line('tax_rate_id'));
+        $this->form_validation->set_rules('inventory_tax_rate_id', $this->lang->line('tax_rate_id'));
         $this->form_validation->set_rules('inventory_track_stock', $this->lang->line('track_stock'));
 
 		return parent::validate();
@@ -74,6 +74,20 @@ class Mdl_Inventory extends MY_Model {
 
 		return $db_array;
 
+	}
+	
+	public function save($db_array, $id = NULL, $initial_stock_quantity = NULL) {
+
+		parent::save($db_array, $id);
+		
+		if ($initial_stock_quantity) {
+			
+			$inventory_id = $this->db->insert_id();
+			
+			$this->mdl_inventory_stock->adjust($inventory_id, $initial_stock_quantity, 0, $this->lang->line('initial_stock_quantity'));
+			
+		}
+		
 	}
 
 }

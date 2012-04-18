@@ -3,11 +3,11 @@
     <tr>
         <th scope="col" class="first" style="width: 25%;"><?php echo $this->lang->line('client'); ?></th>
         <th scope="col" style="width: 10%;"><?php echo $this->lang->line('invoice_number'); ?></th>
-        <th scope="col" style="width: 10%;"><?php echo $this->lang->line('invoice_date'); ?></th>
+        <th scope="col" style="width: 15%;"><?php echo $this->lang->line('invoice_date'); ?></th>
         <th scope="col" style="width: 10%;"><?php echo $this->lang->line('due_date'); ?></th>
         <th scope="col" style="width: 15%; text-align: right;"><?php echo $this->lang->line('total'); ?></th>
         <th scope="col" style="width: 15%; text-align: right;"><?php echo $this->lang->line('paid'); ?></th>
-        <th scope="col" class="last" style="width: 15%; text-align: right;"><?php echo $this->lang->line('balance'); ?></th>
+        <th scope="col" class="last" style="width: 10%; text-align: right;"><?php echo $this->lang->line('balance'); ?></th>
     </tr>
 
     <?php foreach ($invoices as $invoice) { ?>
@@ -31,7 +31,7 @@
         <td>&nbsp;</td>
         <td style="text-align: right;"><?php echo display_currency($totals['total_invoice']); ?></td>
         <td style="text-align: right;"><?php echo display_currency($totals['total_paid']); ?></td>
-        <td style="text-align: right;"><?php echo display_currency($totals['total_balance']); ?></td>
+        <td class="last" style="text-align: right;"><?php echo display_currency($totals['total_balance']); ?></td>
     </tr>
 
 </table>

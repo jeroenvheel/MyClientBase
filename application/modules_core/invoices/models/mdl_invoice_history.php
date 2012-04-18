@@ -20,6 +20,23 @@ class Mdl_Invoice_History extends MY_Model {
 		);
 
 	}
+	
+    public function save($invoice_id, $user_id, $invoice_history_data) {
+
+        if (!$this->mdl_mcb_data->setting('disable_invoice_audit_history')) {
+
+            $db_array = array(
+                'invoice_id'			=>	$invoice_id,
+                'user_id'				=>	$user_id,
+                'invoice_history_date'	=>	time(),
+                'invoice_history_data'	=>	$invoice_history_data
+            );
+
+            $this->db->insert('mcb_invoice_history', $db_array);
+
+        }
+
+    }
 
 	function clear_history($invoice_id = NULL) {
 

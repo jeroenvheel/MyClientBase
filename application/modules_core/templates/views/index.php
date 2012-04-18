@@ -1,12 +1,14 @@
 <?php $this->load->view('dashboard/header'); ?>
 
-<div class="grid_7" id="content_wrapper">
+<div class="grid_10" id="content_wrapper">
 
 	<div class="section_wrapper">
 
 		<h3 class="title_black"><?php echo $page_title; ?>
 			<form method="post" action="<?php echo site_url($this->uri->uri_string()); ?>" style="display: inline;">
-				<input type="submit" style="float: right; margin-top: 10px; margin-right: 10px;" name="btn_create_template" value="<?php echo $this->lang->line('add'); ?>" <?php if(!$dir_is_writable) { ?>disabled<?php } ?>>
+				<span style="font-size: 60%;">
+				<input type="submit" class="uibutton" style="float: right; margin-top: 10px; margin-right: 10px;" name="btn_create_template" value="<?php echo $this->lang->line('add'); ?>" <?php if(!$dir_is_writable) { ?>disabled<?php } ?>>
+				</span>
 			</form>
 		</h3>
 
@@ -21,13 +23,13 @@
 
 			<?php } else { ?>
 
-				<table>
+				<table style="width: 100%;">
 					<tr>
 						<th scope="col" class="first"><?php echo $this->lang->line('template_name'); ?></th>
 						<th scope="col" class="last"><?php echo $this->lang->line('actions'); ?></th>
 					</tr>
 					<?php foreach ($templates as $template) { ?>
-					<tr>
+					<tr class="hoverall">
 						<td class="first"><?php echo $template; ?></td>
 						<td class="last">
 							<a href="<?php echo site_url('templates/form/type/' . uri_assoc('type') . '/template_name/' . $template); ?>" title="<?php echo $this->lang->line('edit'); ?>">

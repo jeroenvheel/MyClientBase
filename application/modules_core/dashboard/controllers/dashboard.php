@@ -61,6 +61,12 @@ class Dashboard extends Admin_Controller {
 
 		}
 
+		if ($this->mdl_mcb_data->setting('dashboard_show_quotes') == 'TRUE') {
+
+			$data['quotes'] = $this->mdl_invoices->get_quotes();
+
+		}
+
 		$this->load->view('dashboard', $data);
 
 	}

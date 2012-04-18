@@ -12,12 +12,9 @@ class Contacts extends Admin_Controller {
 
 	}
 
-
 	function form() {
 
 		if (!$this->mdl_contacts->validate()) {
-
-			$this->load->helper('form');
 
 			if (!$_POST AND uri_assoc('contact_id', 4)) {
 
@@ -37,26 +34,11 @@ class Contacts extends Admin_Controller {
 
 			$this->mdl_contacts->save($this->mdl_contacts->db_array(), uri_assoc('contact_id', 4));
 
-			$this->session->set_flashdata('tab_index', 1);
+			$this->session->set_flashdata('tab_index', 2);
 
-			$this->redir->redirect('clients/details/client_id/' . uri_assoc('client_id', 4));
+			$this->redir->redirect('clients/form/client_id/' . uri_assoc('client_id', 4));
 
 		}
-
-	}
-
-	function details() {
-
-		$this->redir->set_last_index();
-
-		$this->load->model('mdl_contacts');
-
-		$contact = $this->mdl_contacts->get(array('where'=>array('mcb_contacts.contact_id'=>uri_assoc('contact_id', 4))));
-
-		$data = array(
-			'contact'		=>	$contact);
-
-		$this->load->view('contact_details', $data);
 
 	}
 
@@ -68,9 +50,9 @@ class Contacts extends Admin_Controller {
 
 		}
 
-		$this->session->set_flashdata('tab_index', 1);
+		$this->session->set_flashdata('tab_index', 2);
 
-		$this->redir->redirect('clients/details/client_id/' . uri_assoc('client_id', 4));
+		$this->redir->redirect('clients/form/client_id/' . uri_assoc('client_id', 4));
 
 	}
 
@@ -84,9 +66,9 @@ class Contacts extends Admin_Controller {
 
 		elseif ($this->input->post('btn_cancel')) {
 
-			$this->session->set_flashdata('tab_index', 1);
+			$this->session->set_flashdata('tab_index', 2);
 
-			$this->redir->redirect('clients/details/client_id/' . uri_assoc('client_id', 4));
+			$this->redir->redirect('clients/form/client_id/' . uri_assoc('client_id', 4));
 
 		}
 

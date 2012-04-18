@@ -11,20 +11,16 @@ class Mdl_Payments extends MY_Model {
 		$this->primary_key = 'mcb_payments.payment_id';
 
 		$this->select_fields = "
-		SQL_CALC_FOUND_ROWS *";
+		SQL_CALC_FOUND_ROWS *,
+		mcb_payments.payment_method_id";
 
 		$this->order_by = 'mcb_payments.payment_date DESC';
 
 		$this->joins = array(
 			'mcb_invoices'			=>	'mcb_invoices.invoice_id = mcb_payments.invoice_id',
-			'mcb_clients'			=>	'mcb_clients.client_id = mcb_invoices.client_id'
+			'mcb_clients'			=>	'mcb_clients.client_id = mcb_invoices.client_id',
+			'mcb_payment_methods'	=>	array('mcb_payment_methods.payment_method_id = mcb_payments.payment_method_id', 'left')
 		);
-
-		if ($this->mdl_mcb_data->setting('version') > '0.8.5') {
-
-			$this->joins['mcb_payment_methods'] = array('mcb_payment_methods.payment_method_id = mcb_payments.payment_method_id', 'left');
-
-		}
 
 		$this->limit = $this->mdl_mcb_data->setting('results_per_page');
 
@@ -57,6 +53,8 @@ class Mdl_Payments extends MY_Model {
 
 	public function amount_validate($payment_amount) {
 
+		$payment_amount = standardize_number($payment_amount);
+
 		if (uri_assoc('invoice_id')) {
 
 			$invoice_id = uri_assoc('invoice_id');
@@ -69,39 +67,51 @@ class Mdl_Payments extends MY_Model {
 
 		}
 
-		$this->db->select('invoice_balance');
+		if (isset($invoice_id)) {
 
-		$this->db->where('invoice_id', $invoice_id);
+			if ($payment_amount <= 0) {
 
-		$invoice_balance = $this->db->get('mcb_invoice_amounts')->row()->invoice_balance;
-
-		if (!uri_assoc('payment_id')) {
-
-			if ($payment_amount > $invoice_balance) {
-
-				$this->form_validation->set_message('amount_validate', $this->lang->line('amount_cannot_exceed_invoice_balance'));
+				$this->form_validation->set_message('amount_validate', $this->lang->line('amount_greater_than_zero'));
 
 				return FALSE;
+				
+			}
+
+			$this->db->select('invoice_balance');
+
+			$this->db->where('invoice_id', $invoice_id);
+
+			$invoice_balance = $this->db->get('mcb_invoice_amounts')->row()->invoice_balance;
+
+			if (!uri_assoc('payment_id')) {
+
+				if ($payment_amount > $invoice_balance) {
+
+					$this->form_validation->set_message('amount_validate', $this->lang->line('amount_cannot_exceed_invoice_balance'));
+
+					return FALSE;
+
+				}
 
 			}
 
-		}
+			elseif (uri_assoc('payment_id')) {
 
-		elseif (uri_assoc('payment_id')) {
+				$params = array(
+					'where'	=>	array(
+						'mcb_payments.payment_id'	=>	uri_assoc('payment_id')
+					)
+				);
 
-			$params = array(
-				'where'	=>	array(
-					'mcb_payments.payment_id'	=>	uri_assoc('payment_id')
-				)
-			);
+				$original_amount = parent::get($params)->payment_amount;
 
-			$original_amount = parent::get($params)->payment_amount;
+				if ($payment_amount > ($invoice_balance + $original_amount)) {
 
-			if ($payment_amount > ($invoice_balance + $original_amount)) {
+					$this->form_validation->set_message('amount_validate', $this->lang->line('amount_cannot_exceed_invoice_balance'));
 
-				$this->form_validation->set_message('amount_validate', $this->lang->line('amount_cannot_exceed_invoice_balance'));
+					return FALSE;
 
-				return FALSE;
+				}
 
 			}
 
@@ -141,6 +151,22 @@ class Mdl_Payments extends MY_Model {
 
 		parent::save($db_array, uri_assoc('payment_id'));
 
+		if (isset($db_array['payment_method_id']) and $db_array['payment_method_id'] == '9999') {
+
+			$this->db->select('client_id');
+			$this->db->where('invoice_id', $db_array['invoice_id']);
+			$client_id = $this->db->get('mcb_invoices')->row()->client_id;
+
+			$credit_db_array = array(
+				'client_credit_client_id'	=>	$client_id,
+				'client_credit_amount'		=>	$db_array['payment_amount'] * -1,
+				'client_credit_date'		=>	$db_array['payment_date']
+			);
+
+			$this->db->insert('mcb_client_credits', $credit_db_array);
+
+		}
+
 	}
 
 	public function prep_validation($key) {
@@ -171,17 +197,17 @@ class Mdl_Payments extends MY_Model {
 
 	}
 
-    public function get_total_paid($params = NULL) {
+	public function get_total_paid($params = NULL) {
 
-        $params = ($params) ? $params : array();
+		$params = ($params) ? $params : array();
 
-        $params['select'] = 'IFNULL(SUM(payment_amount), 0) AS total_invoice_paid';
-        
-        $result = parent::get($params);
+		$params['select'] = 'IFNULL(SUM(payment_amount), 0) AS total_invoice_paid';
 
-        return $result[0]->total_invoice_paid;
+		$result = parent::get($params);
 
-    }
+		return $result[0]->total_invoice_paid;
+
+	}
 
 }
 

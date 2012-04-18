@@ -2,11 +2,16 @@
 
 <?php echo modules::run('invoices/widgets/generate_dialog'); ?>
 
-<div class="grid_7" id="content_wrapper">
+<div class="grid_10" id="content_wrapper">
 
 	<div class="section_wrapper">
 
-		<h3 class="title_black"><?php echo $this->lang->line('invoice_search'); ?><?php $this->load->view('dashboard/btn_add', array('btn_name'=>'btn_add_invoice', 'btn_value'=>$this->lang->line('create_invoice'))); ?></h3>
+		<h3 class="title_black"><?php echo $this->lang->line('invoice_search'); ?>
+			<span style="font-size: 60%;">
+				<?php $this->load->view('dashboard/btn_add', array('btn_name'=>'btn_add_invoice', 'btn_value'=>$this->lang->line('create_invoice'))); ?>
+			</span>
+
+		</h3>
 
 		<div class="content toggle no_padding">
 
@@ -19,7 +24,5 @@
 	</div>
 
 </div>
-
-<?php $this->load->view('dashboard/sidebar', array('side_block'=>'invoices/sidebar')); ?>
 
 <?php $this->load->view('dashboard/footer'); ?>

@@ -16,8 +16,9 @@
 		<div class="section_wrapper">
 
 			<h3 class="title_black"><?php echo $this->lang->line('system_settings'); ?>
-
-				<input type="submit" name="btn_save_settings" style="float: right; margin-top: 10px; margin-right: 10px;" value="<?php echo $this->lang->line('save_settings'); ?>" />
+				<span style="font-size: 60%;">
+				<input type="submit" name="btn_save_settings" class="uibutton" style="float: right; margin-top: 10px; margin-right: 10px;" value="<?php echo $this->lang->line('save_settings'); ?>" />
+				</span>
 
 			</h3>
 
@@ -36,23 +37,23 @@
 
 					<div id="tab_application">
 						<dl>
-							<dt><label><?php echo $this->lang->line('application_version'); ?>: </label></dt>
+							<dt><?php echo $this->lang->line('application_version'); ?>: </dt>
 							<dd><?php echo $this->mdl_mcb_data->setting('version'); ?></dd>
 						</dl>
 						<dl>
-							<dt><label><?php echo $this->lang->line('database_backup'); ?>: </label></dt>
+							<dt><?php echo $this->lang->line('database_backup'); ?>: </dt>
 							<dd><input type="submit" name="btn_backup" value="<?php echo $this->lang->line('database_backup'); ?>" /></dd>
 						</dl>
 						<dl>
-							<dt><label><?php echo $this->lang->line('optimize_database'); ?>: </label></dt>
+							<dt><?php echo $this->lang->line('optimize_database'); ?>: </dt>
 							<dd><?php echo anchor('settings/optimize_db', $this->lang->line('optimize_database')); ?></dd>
 						</dl>
                         <dl>
-                            <dt><label><?php echo $this->lang->line('enable_profiler'); ?>: </label></dt>
+                            <dt><?php echo $this->lang->line('enable_profiler'); ?>: </dt>
                             <dd><input type="checkbox" name="enable_profiler" value="1" <?php if ($this->mdl_mcb_data->setting('enable_profiler')) { ?>checked="checked"<?php } ?> /></dd>
                         </dl>
                         <dl>
-                            <dt><label><?php echo $this->lang->line('application_title'); ?>: </label></dt>
+                            <dt><?php echo $this->lang->line('application_title'); ?>: </dt>
                             <dd><input type="text" name="application_title" value="<?php echo application_title(); ?>" /></dd>
                         </dl>
 					</div>

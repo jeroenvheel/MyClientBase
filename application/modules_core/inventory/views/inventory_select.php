@@ -4,6 +4,18 @@
 
 		$("#inventory_id").change(function(){
 
+			if ($('#inventory_id').val() != 'please_select') {
+
+				$('#dl_save_as_inventory').hide();
+
+			}
+
+			else {
+
+				$('#dl_save_as_inventory').show();
+
+			}
+
 			$.post("<?php echo site_url('inventory/jquery_item_data'); ?>",{
 
 				inventory_id: $("#inventory_id").val()

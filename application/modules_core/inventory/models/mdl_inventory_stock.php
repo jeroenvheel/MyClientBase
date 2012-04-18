@@ -25,7 +25,7 @@ class Mdl_Inventory_Stock extends MY_Model {
 
     }
 
-    public function adjust($inventory_id, $quantity, $invoice_item_id = 0, $inventory_stock_notes = NULL) {
+    public function adjust($inventory_id, $quantity, $invoice_item_id = 0, $inventory_stock_notes = '') {
 
         if ($this->track_stock($inventory_id)) {
 

@@ -86,12 +86,6 @@
 				<th width="10%" align="right">
 					<?php echo $this->lang->line('unit'); ?>
 				</th>
-                <th width="10%" align="right">
-                    <?php echo $this->lang->line('tax_rate'); ?>
-                </th>
-				<th width="10%" align="right">
-					<?php echo $this->lang->line('tax'); ?>
-				</th>
 				<th width="10%" align="right">
 					<?php echo $this->lang->line('cost'); ?>
 				</th>
@@ -110,49 +104,39 @@
 				<td align="right">
 					<?php echo invoice_item_unit_price($item); ?>
 				</td>
-                <td align="right">
-                    <?php echo invoice_item_tax_rate($item); ?>
-                </td>
 				<td align="right">
-					<?php echo invoice_item_tax($item); ?>
-				</td>
-				<td align="right">
-					<?php echo invoice_item_total($item); ?>
+					<?php echo display_currency($item->item_subtotal); ?>
 				</td>
 			</tr>
 			<?php } ?>
 			<tr>
 				<td colspan="3"></td>
-				<td colspan="4">
+				<td colspan="2">
 					<hr />
 				</td>
 			</tr>
 
 			<tr>
-				<td colspan="6" align="right">
+				<td colspan="4" align="right">
 					<?php echo $this->lang->line('subtotal'); ?>
 				</td>
 				<td align="right">
-					<?php echo invoice_subtotal($invoice); ?>
+					<?php echo invoice_item_subtotal($invoice); ?>
 				</td>
 			</tr>
 
-			<?php foreach ($invoice->invoice_tax_rates as $invoice_tax_rate) { ?>
-			<?php if (invoice_has_tax($invoice_tax_rate)) { ?>
 			<tr>
-				<td colspan="6" align="right">
-					<?php echo invoice_tax_rate_name($invoice_tax_rate); ?>
+				<td colspan="4" align="right">
+					<?php echo $this->lang->line('tax'); ?>
 				</td>
 				<td align="right">
-					<?php echo invoice_tax_rate_amount($invoice_tax_rate); ?>
+					<?php echo invoice_tax_total($invoice); ?>
 				</td>
 			</tr>
-			<?php } ?>
-			<?php } ?>
 
 			<?php if ($invoice->invoice_shipping > 0) { ?>
 			<tr>
-				<td colspan="6" align="right">
+				<td colspan="4" align="right">
 					<?php echo $this->lang->line('shipping'); ?>
 				</td>
 				<td align="right">
@@ -163,7 +147,7 @@
 
 			<?php if ($invoice->invoice_discount > 0) { ?>
 			<tr>
-				<td colspan="6" align="right">
+				<td colspan="4" align="right">
 					<?php echo $this->lang->line('discount'); ?>
 				</td>
 				<td align="right">
@@ -173,7 +157,7 @@
 			<?php } ?>
 
 			<tr>
-				<td colspan="6" align="right">
+				<td colspan="4" align="right">
 					<?php echo $this->lang->line('grand_total'); ?>
 				</td>
 				<td align="right">
@@ -182,7 +166,7 @@
 			</tr>
 
 			<tr>
-				<td colspan="6" align="right">
+				<td colspan="4" align="right">
 					<?php echo $this->lang->line('amount_paid'); ?>
 				</td>
 				<td align="right">
@@ -191,7 +175,7 @@
 			</tr>
 
 			<tr>
-				<td colspan="6" align="right">
+				<td colspan="4" align="right">
 					<?php echo $this->lang->line('total_due'); ?>
 				</td>
 				<td align="right">

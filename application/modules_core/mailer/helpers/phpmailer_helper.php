@@ -2,121 +2,113 @@
 
 function phpmail_send($from, $to, $subject, $message, $attachment_path = NULL, $cc = NULL, $bcc = NULL) {
 
-    require_once(APPPATH . 'modules_core/mailer/helpers/phpmailer/class.phpmailer.php');
+	require_once(APPPATH . 'modules_core/mailer/helpers/phpmailer/class.phpmailer.php');
 
-    $CI =& get_instance();
+	$CI =& get_instance();
 
-    $mail = new PHPMailer();
+	$mail = new PHPMailer();
 
-    $mail->CharSet = 'UTF-8';
+	$mail->CharSet = 'UTF-8';
 
-    $mail->IsHtml();
+	$mail->IsHtml();
 
-    if ($CI->mdl_mcb_data->setting('email_protocol') == 'smtp') {
+	if ($CI->mdl_mcb_data->setting('email_protocol') == 'smtp') {
 
-        $mail->IsSMTP();
+		$mail->IsSMTP();
 
-        $mail->SMTPAuth = true;
+		$mail->SMTPAuth = true;
 
-        if ($CI->mdl_mcb_data->setting('smtp_security')) {
+		if ($CI->mdl_mcb_data->setting('smtp_security')) {
 
-            $mail->SMTPSecure = $CI->mdl_mcb_data->setting('smtp_security');
+			$mail->SMTPSecure = $CI->mdl_mcb_data->setting('smtp_security');
 
-        }
+		}
 
-        $mail->Host = $CI->mdl_mcb_data->setting('smtp_host');
+		$mail->Host = $CI->mdl_mcb_data->setting('smtp_host');
 
-        $mail->Port = $CI->mdl_mcb_data->setting('smtp_port');
+		$mail->Port = $CI->mdl_mcb_data->setting('smtp_port');
 
-        $mail->Username = $CI->mdl_mcb_data->setting('smtp_user');
+		$mail->Username = $CI->mdl_mcb_data->setting('smtp_user');
 
-        $mail->Password = $CI->mdl_mcb_data->setting('smtp_pass');
+		$mail->Password = $CI->mdl_mcb_data->setting('smtp_pass');
 
-    }
+	}
 
-    elseif ($CI->mdl_mcb_data->setting('email_protocol') == 'sendmail') {
+	elseif ($CI->mdl_mcb_data->setting('email_protocol') == 'sendmail') {
 
-        $mail->IsSendmail();
+		$mail->IsSendmail();
 
-    }
+	}
 
-    if (is_array($from)) {
+	if (is_array($from)) {
 
-        $mail->SetFrom($from[0], $from[1]);
+		$mail->SetFrom($from[0], $from[1]);
 
-    }
+	}
 
-    else {
+	else {
 
-        $mail->SetFrom($from);
+		$mail->SetFrom($from);
 
-    }
+	}
 
-    $mail->Subject = $subject;
+	$mail->Subject = $subject;
 
-    $mail->Body = $message;
+	$mail->Body = $message;
 
-    $to = (strpos($to, ',')) ? explode(',', $to) : explode(';', $to);
+	$to = (strpos($to, ',')) ? explode(',', $to) : explode(';', $to);
 
-    foreach ($to as $address) {
+	foreach ($to as $address) {
 
-        $mail->AddAddress($address);
+		$mail->AddAddress($address);
 
-    }
+	}
 
-    if ($cc) {
+	if ($cc) {
 
-        $cc = (strpos($cc, ',')) ? explode(',', $cc) : explode(';', $cc);
+		$cc = (strpos($cc, ',')) ? explode(',', $cc) : explode(';', $cc);
 
-        foreach ($cc as $address) {
+		foreach ($cc as $address) {
 
-            $mail->AddCC($address);
+			$mail->AddCC($address);
 
-        }
+		}
 
-    }
+	}
 
-    if ($bcc) {
+	if ($bcc) {
 
-        $bcc = (strpos($bcc, ',')) ? explode(',', $bcc) : explode(';', $bcc);
+		$bcc = (strpos($bcc, ',')) ? explode(',', $bcc) : explode(';', $bcc);
 
-        foreach ($bcc as $address) {
+		foreach ($bcc as $address) {
 
-            $mail->AddBCC($address);
+			$mail->AddBCC($address);
 
-        }
+		}
 
-    }
+	}
 
-    if ($attachment_path) {
+	if ($attachment_path) {
 
-        $mail->AddAttachment($attachment_path);
+		$mail->AddAttachment($attachment_path);
 
-    }
+	}
 
-    if ($mail->Send()) {
+	if ($mail->Send()) {
 
-        if (isset($CI->load->_ci_classes['session'])) {
+		$CI->session->set_flashdata('custom_success', $CI->lang->line('email_success'));
 
-            $CI->session->set_flashdata('custom_success', $CI->lang->line('email_success'));
+		return TRUE;
 
-            return TRUE;
+	}
 
-        }
+	else {
 
-    }
+		$CI->session->set_flashdata('custom_error', $mail->ErrorInfo);
 
-    else {
-
-        if (isset($CI->this->load->_ci_classes['session'])) {
-
-            $CI->session->set_flashdata('custom_error', $mail->ErrorInfo);
-
-            return FALSE;
-
-        }
-
-    }
+		return FALSE;
+		
+	}
 
 }
 

@@ -33,8 +33,6 @@ class Tax_Rates extends Admin_Controller {
 
 		if (!$this->mdl_tax_rates->validate()) {
 
-			$this->load->helper('form');
-
 			if (!$_POST AND uri_assoc('tax_rate_id')) {
 
 				$this->mdl_tax_rates->prep_validation(uri_assoc('tax_rate_id'));

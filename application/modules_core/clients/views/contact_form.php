@@ -15,12 +15,12 @@
 				<form method="post" action="<?php echo site_url($this->uri->uri_string()); ?>">
 
 				<dl>
-					<dt><label><?php echo $this->lang->line('first_name'); ?>: </label></dt>
+					<dt><label>* <?php echo $this->lang->line('first_name'); ?>: </label></dt>
 					<dd><input type="text" name="first_name" id="first_name" value="<?php echo $this->mdl_contacts->form_value('first_name'); ?>" /></dd>
 				</dl>
 
 				<dl>
-					<dt><label><?php echo $this->lang->line('last_name'); ?>: </label></dt>
+					<dt><label>* <?php echo $this->lang->line('last_name'); ?>: </label></dt>
 					<dd><input type="text" name="last_name" id="last_name" value="<?php echo $this->mdl_contacts->form_value('last_name'); ?>" /></dd>
 				</dl>
 

@@ -302,7 +302,7 @@ class Mdl_Invoice_Amounts extends CI_Model {
          */
 
         /** Select the item amount which is taxable **/
-        $this->db->select('SUM(item_subtotal) AS invoice_item_taxable');
+        $this->db->select("IFNULL(SUM(item_subtotal), '0.00') AS invoice_item_taxable", FALSE);
         $this->db->join('mcb_invoice_items', 'mcb_invoice_items.invoice_item_id = mcb_invoice_item_amounts.invoice_item_id');
         $this->db->where('invoice_id', $invoice_id);
         $this->db->where('is_taxable', 1);

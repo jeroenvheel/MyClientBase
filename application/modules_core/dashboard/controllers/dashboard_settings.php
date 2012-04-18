@@ -69,6 +69,18 @@ class Dashboard_Settings extends Admin_Controller {
 
 		}
 
+		if ($this->input->post('dashboard_show_quotes')) {
+
+			$this->mdl_mcb_data->save('dashboard_show_quotes', 'TRUE');
+
+		}
+
+		else {
+
+			$this->mdl_mcb_data->save('dashboard_show_quotes', 'FALSE');
+
+		}
+
 		$this->mdl_mcb_data->save('dashboard_override', $this->input->post('dashboard_override'));
 
         $this->mdl_mcb_data->save('dashboard_total_paid_cutoff_date', strtotime(standardize_date($this->input->post('dashboard_total_paid_cutoff_date'))));

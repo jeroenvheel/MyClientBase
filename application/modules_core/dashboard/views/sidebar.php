@@ -1,12 +1,8 @@
 <div class="grid_3" id="sidebar">
 
+	<?php echo modules::run('mcb_menu/display_control_center', array('view'=>'dashboard/sidebar_control_center')); ?>
+
 	<?php
-
-	if (isset($show_quicklinks)) {
-
-		$this->load->view('dashboard/sidebar_quicklinks');
-
-	}
 
 	if (isset($side_block)) {
 

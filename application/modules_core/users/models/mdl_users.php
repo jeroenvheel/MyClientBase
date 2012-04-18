@@ -15,16 +15,16 @@ class Mdl_Users extends MY_Model {
 
 		$this->order_by = 'last_name, first_name';
 
-        $this->custom_fields = $this->mdl_fields->get_object_fields(6);
+		$this->custom_fields = $this->mdl_fields->get_object_fields(6);
 
 	}
 
 	public function validate() {
 
 		$this->form_validation->set_rules('global_admin', $this->lang->line('global_administrator'));
-		$this->form_validation->set_rules('username', $this->lang->line('username'), 'required');
+		$this->form_validation->set_rules('username', $this->lang->line('username'), 'required|callback_username_check');
 
-		if (!uri_assoc('user_id')) {
+		if (!uri_assoc('user_id') and $this->uri->segment(2) <> 'profile') {
 
 			$this->form_validation->set_rules('password', $this->lang->line('password'), 'required');
 			$this->form_validation->set_rules('passwordv', $this->lang->line('password_verify'), 'required|matches[password]');
@@ -52,8 +52,38 @@ class Mdl_Users extends MY_Model {
 			$this->form_validation->set_rules($custom_field->column_name, $custom_field->field_name);
 
 		}
-		
-		return parent::validate();
+
+		return parent::validate($this);
+
+	}
+
+	public function username_check($username) {
+
+		$this->db->where('username', $username);
+
+		if (uri_assoc('user_id')) {
+
+			$this->db->where('user_id <>', uri_assoc('user_id'));
+
+		}
+
+		elseif ($this->uri->segment(2) == 'profile') {
+
+			$this->db->where('user_id <>', $this->session->userdata('user_id'));
+
+		}
+
+		$query = $this->db->get('mcb_users');
+
+		if ($query->num_rows()) {
+
+			$this->form_validation->set_message('username_check', $this->lang->line('username_already_exists'));
+
+			return FALSE;
+
+		}
+
+		return TRUE;
 
 	}
 
@@ -79,6 +109,20 @@ class Mdl_Users extends MY_Model {
 
 	}
 
+	public function save($db_array, $user_id = NULL) {
+
+		parent::save($db_array, $user_id);
+
+		if (!$user_id) {
+
+			$user_id = $this->db->insert_id();
+
+		}
+
+		return $user_id;
+
+	}
+
 	public function validate_change_password() {
 
 		$this->form_validation->set_rules('new_password', $this->lang->line('new_password'), 'required');
@@ -88,11 +132,11 @@ class Mdl_Users extends MY_Model {
 
 	}
 
-	public function save_change_password() {
+	public function save_change_password($user_id) {
 
-		if (uri_assoc('user_id')) {
+		if ($user_id) {
 
-			$this->db->where('user_id', uri_assoc('user_id'));
+			$this->db->where('user_id', $user_id);
 
 			$db_array = array(
 				'password'	=>	md5($this->input->post('new_password'))
@@ -111,6 +155,51 @@ class Mdl_Users extends MY_Model {
 		$this->db->where('user_id', $user_id);
 
 		return $this->db->get('mcb_users')->row()->email_address;
+
+	}
+
+	public function delete($user_id) {
+
+		if ($user_id) {
+
+			if ($user_id == $this->session->userdata('user_id')) {
+
+				$this->session->set_flashdata('custom_error', $this->lang->line('cannot_delete_user_account') . '.');
+
+			}
+
+			else {
+
+				parent::delete(array('user_id'=>$user_id));
+
+				$this->load->model('invoices/mdl_invoices');
+
+				$this->db->where('client_user_id', $user_id);
+				$this->db->delete('mcb_clients');
+
+				$this->db->where('tax_rate_user_id', $user_id);
+				$this->db->delete('mcb_tax_rates');
+
+				$this->db->where('invoice_group_user_id', $user_id);
+				$this->db->delete('mcb_invoice_groups');
+
+				$this->db->where('user_id', $user_id);
+				$this->db->delete('mcb_invoices');
+
+				$this->db->where('inventory_user_id', $user_id);
+				$this->db->delete('mcb_inventory');
+
+				$this->db->where('inventory_type_user_id', $user_id);
+				$this->db->delete('mcb_inventory_types');
+
+				$this->db->where('mcb_userdata_user_id', $user_id);
+				$this->db->delete('mcb_userdata');
+
+				$this->mdl_invoices->delete_orphans();
+
+			}
+
+		}
 
 	}
 

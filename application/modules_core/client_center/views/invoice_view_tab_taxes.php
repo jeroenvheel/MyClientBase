@@ -3,7 +3,7 @@
 	<dd>
 		<?php foreach ($invoice_tax_rates as $invoice_tax_rate) { ?>
 		<div class="tax_rate" style="margin-left: 200px;">
-			<?php echo $invoice_tax_rate->tax_rate_percent . '% - ' . $invoice_tax_rate->tax_rate_name; ?> (
+			<?php echo format_number($invoice_tax_rate->tax_rate_percent, TRUE, $this->mdl_mcb_data->setting('decimal_taxes_num')) . '% - ' . $invoice_tax_rate->tax_rate_name; ?> (
 			<?php if ($invoice_tax_rate->tax_rate_option == 1) { echo $this->lang->line('invoice_tax_option_1'); }
 			elseif ($invoice_tax_rate->tax_rate_option == 2) { echo $this->lang->line('invoice_tax_option_2'); } ?>)<br />
 		</div>

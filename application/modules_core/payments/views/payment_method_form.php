@@ -15,7 +15,7 @@
 				<form method="post" action="<?php echo site_url($this->uri->uri_string()); ?>">
 
 				<dl>
-					<dt><label><?php echo $this->lang->line('payment_method'); ?>: </label></dt>
+					<dt><label>* <?php echo $this->lang->line('payment_method'); ?>: </label></dt>
 					<dd><input type="text" name="payment_method" id="payment_method" value="<?php echo $this->mdl_payment_methods->form_value('payment_method'); ?>" /></dd>
 				</dl>
 

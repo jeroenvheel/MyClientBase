@@ -14,7 +14,7 @@
 
 				<?php if (!$field_id) { ?>
 				<dl>
-					<dt><label><?php echo $this->lang->line('object'); ?>: </label></dt>
+					<dt><label>* <?php echo $this->lang->line('object'); ?>: </label></dt>
 					<dd>
 						<select name="object_id">
 							<option value=""><?php echo $this->lang->line('select'); ?></option>
@@ -37,7 +37,7 @@
 				<?php } ?>
 
 				<dl>
-					<dt><label><?php echo $this->lang->line('field_name'); ?>: </label></dt>
+					<dt><label>* <?php echo $this->lang->line('field_name'); ?>: </label></dt>
 					<dd><input type="text" name="field_name" id="field_name" value="<?php echo $this->mdl_fields->form_value('field_name'); ?>" /></dd>
 				</dl>
 

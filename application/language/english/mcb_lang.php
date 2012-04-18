@@ -392,8 +392,9 @@ $lang['username_or_pw_incorrect'] = 'Either your username or password is incorre
 /* NEW FOR 0.9.4.1 */
 $lang['item_tax_rate'] = 'Item Tax Rate';
 $lang['item_tax_option'] = 'Item Tax Option';
-$lang['item_tax_option_0'] = 'Add to Total';
-$lang['item_tax_option_1'] = 'Include in Total';
+// These two items are changed below in 0.9.6
+//$lang['item_tax_option_0'] = 'Add to Total';
+//$lang['item_tax_option_1'] = 'Include in Total';
 
 /* NEW FOR 0.9.4.2 */
 $lang['default_quote_group'] = 'Default Quote Group';
@@ -455,5 +456,70 @@ $lang['apply_invoice_tax'] = 'Apply Invoice Tax';
 $lang['email_footer'] = 'Email Footer';
 $lang['footer'] = 'Footer';
 $lang['inventory_type_in_use'] = 'The Inventory Type specified is already in use.';
+
+/* NEW FOR 0.9.6 (0.10)*/
+//$lang['item_tax_option_0'] = 'Add to Total';
+//$lang['item_tax_option_1'] = 'Include in Total';
+$lang['account_deposits'] = 'Account Deposits';
+$lang['apply_credit'] = 'Apply Credit';
+$lang['calendar_view'] = 'Calendar View';
+$lang['control_center'] = 'Control Center';
+$lang['copy'] = 'Copy';
+$lang['credit_amount'] = 'Credit Amount';
+$lang['dashboard_show_quotes'] = 'Show Quotes';
+$lang['email_body_template'] = 'Default Body Template';
+$lang['email_footer_template'] = 'Default Footer Template';
+$lang['enter_deposit'] = 'Enter Deposit';
+$lang['initial_stock_quantity'] = 'Initial Stock Quantity';
+$lang['invoice_count'] = 'Invoice Count';
+$lang['item_tax_option_0'] = 'Add to Amount';
+$lang['item_tax_option_1'] = 'Include in Amount';
+$lang['list_view'] = 'List View';
+$lang['my_profile'] = 'My Profile';
+$lang['sales'] = 'Sales';
+$lang['sales_with_tax'] = 'Sales With Tax';
+$lang['sales_by_customer'] = 'Sales by Customer';
+
+/* Calendar */
+$lang['calendarToday'] = 'Today';
+$lang['calendarDay'] = 'Day';
+$lang['calendarWeek'] = 'Week';
+$lang['calendarMonth'] = 'Month';
+$lang['months'] = array("January","February","March","April","May","June","July","August","September","October","November","December");
+$lang['monthsShort'] = array("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec");
+$lang['days'] = array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday");
+$lang['daysShort'] = array("Sun","Mon","Tue","Wed","Thu","Fri","Sat");
+
+/* NEW FOR 0.11 */
+$lang['active'] = 'Active';
+$lang['amount_greater_than_zero'] = 'The Amount must be greater than zero.';
+$lang['default_invoice_email_template'] = 'Default Invoice Email Template';
+$lang['default_item_tax_option'] = 'Default Item Tax Option';
+$lang['default_overdue_invoice_email_template'] = 'Default Overdue Invoice Email Template';
+$lang['default_payment_method'] = 'Default Payment Method';
+$lang['email_body'] = 'Email Body';
+$lang['email_footer'] = 'Email Footer';
+$lang['email_template_form'] = 'Email Template Form';
+$lang['email_template_title'] = 'Email Template Title';
+$lang['email_templates'] = 'Email Templates';
+$lang['merchant_account_id'] = 'Merchant Account ID';
+$lang['merchant_currency_code'] = 'Merchant Currency Code';
+$lang['merchant_driver'] = 'Merchant Driver';
+$lang['merchant_enabled'] = 'Merchant Enabled';
+$lang['merchant_online_payment'] = 'Online Payment';
+$lang['merchant_pay_online'] = 'Pay Online';
+$lang['merchant_payment_cancelled'] = 'Your payment has been cancelled.';
+$lang['merchant_payment_finished'] = 'Thank you for your payment.';
+$lang['merchant_test_mode'] = 'Merchant Test Mode';
+$lang['no'] = 'No';
+$lang['off'] = 'Off';
+$lang['on'] = 'On';
+$lang['yes'] = 'Yes';
+
+/* NEW FOR 0.12 */
+$lang['clear'] = 'Clear';
+$lang['default_apply_invoice_tax'] = 'Default Apply Invoice Tax to Items';
+$lang['group_by'] = 'Group By';
+$lang['payment_entered'] = 'A payment of %s was applied';
 
 ?>

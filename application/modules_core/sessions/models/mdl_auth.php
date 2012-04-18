@@ -4,6 +4,7 @@ class Mdl_Auth extends MY_Model {
 
 	public function auth($username, $password) {
 
+		$this->db->select('mcb_clients.*, mcb_users.*');
         $this->db->join('mcb_clients', 'mcb_clients.client_id = mcb_users.client_id', 'left');
 
 		$this->db->where('username', $username);

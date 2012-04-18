@@ -1,16 +1,20 @@
 <?php $this->load->view('dashboard/header'); ?>
 
-<div class="grid_7" id="content_wrapper">
+<div class="grid_10" id="content_wrapper">
 
 	<div class="section_wrapper">
 
-		<h3 class="title_black"><?php echo $this->lang->line('user_accounts'); ?><?php $this->load->view('dashboard/btn_add', array('btn_value'=>$this->lang->line('create_user_account'))); ?></h3>
+		<h3 class="title_black"><?php echo $this->lang->line('user_accounts'); ?>
+			<span style="font-size: 60%;">
+				<?php $this->load->view('dashboard/btn_add', array('btn_value'=>$this->lang->line('create_user_account'))); ?>
+			</span>
+		</h3>
 
 		<?php $this->load->view('dashboard/system_messages'); ?>
 
 		<div class="content toggle no_padding">
 
-			<table>
+			<table style="width: 100%;">
 				<tr>
 					<th scope="col" class="first"><?php echo $this->lang->line('id'); ?></th>
 					<th scope="col"><?php echo $this->lang->line('name'); ?></th>
@@ -20,7 +24,7 @@
 					<th scope="col" class="last"><?php echo $this->lang->line('actions'); ?></th>
 				</tr>
 				<?php foreach ($users as $user) { ?>
-				<tr>
+				<tr id="user_<?php echo $user->user_id; ?>" class="hoverall">
 					<td class="first"><?php echo $user->user_id; ?></td>
 					<td><?php echo $user->last_name . ', ' . $user->first_name; ?></td>
 					<td><?php echo $user->company_name; ?></td>
@@ -50,6 +54,6 @@
 
 </div>
 
-<?php $this->load->view('dashboard/sidebar', array('side_block'=>array('users/sidebar', 'settings/sidebar'),'hide_quicklinks'=>TRUE)); ?>
+<?php $this->load->view('dashboard/sidebar'); ?>
 
 <?php $this->load->view('dashboard/footer'); ?>

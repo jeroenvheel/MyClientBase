@@ -57,4 +57,84 @@ function standardize_date($date) {
 
 }
 
+function date_formats($format = NULL, $element = NULL) {
+
+	$date_formats = array(
+		'm/d/Y' => array(
+			'key' => 'm/d/Y',
+			'picker' => 'mm/dd/yy',
+			'mask' => '99/99/9999',
+			'dropdown' => 'mm/dd/yyyy'),
+		'm/d/y' => array(
+			'key' => 'm/d/y',
+			'picker' => 'mm/dd/y',
+			'mask' => '99/99/99',
+			'dropdown' => 'mm/dd/yy'),
+		'Y/m/d' => array(
+			'key' => 'Y/m/d',
+			'picker' => 'yy/mm/dd',
+			'mask' => '9999/99/99',
+			'dropdown' => 'yyyy/mm/dd'),
+		'd/m/Y' => array(
+			'key' => 'd/m/Y',
+			'picker' => 'dd/mm/yy',
+			'mask' => '99/99/9999',
+			'dropdown' => 'dd/mm/yyyy'),
+		'd/m/y' => array(
+			'key' => 'd/m/y',
+			'picker' => 'dd/mm/y',
+			'mask' => '99/99/99',
+			'dropdown' => 'dd/mm/yy'),
+		'm-d-Y' => array(
+			'key' => 'm-d-Y',
+			'picker' => 'mm-dd-yy',
+			'mask' => '99-99-9999',
+			'dropdown' => 'mm-dd-yyyy'),
+		'm-d-y' => array(
+			'key' => 'm-d-y',
+			'picker' => 'mm-dd-y',
+			'mask' => '99-99-99',
+			'dropdown' => 'mm-dd-yy'),
+		'Y-m-d' => array(
+			'key' => 'Y-m-d',
+			'picker' => 'yy-mm-dd',
+			'mask' => '9999-99-99',
+			'dropdown' => 'yyyy-mm-dd'),
+		'y-m-d' => array(
+			'key' => 'y-m-d',
+			'picker' => 'y-mm-dd',
+			'mask' => '99-99-99',
+			'dropdown' => 'yy-mm-dd'),
+		'd.m.Y' => array(
+			'key' => 'd.m.Y',
+			'picker' => 'dd.mm.yy',
+			'mask' => '99.99.9999',
+			'dropdown' => 'dd.mm.yyyy'),
+		'd.m.y' => array(
+			'key' => 'd.m.y',
+			'picker' => 'dd.mm.y',
+			'mask' => '99.99.99',
+			'dropdown' => 'dd.mm.yy')
+	);
+	
+	if ($format and $element) {
+		
+		return $date_formats[$format][$element];
+		
+	}
+	
+	elseif ($format) {
+		
+		return $date_formats[$format];
+		
+	}
+	
+	else {
+		
+		return $date_formats;
+		
+	}
+
+}
+
 ?>

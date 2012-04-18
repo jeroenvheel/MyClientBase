@@ -34,8 +34,6 @@ class Invoice_Statuses extends Admin_Controller {
 
 		if (!$this->mdl_invoice_statuses->validate()) {
 
-			$this->load->helper('form');
-
 			if (!$_POST AND uri_assoc('invoice_status_id')) {
 
 				$this->mdl_invoice_statuses->prep_validation(uri_assoc('invoice_status_id'));

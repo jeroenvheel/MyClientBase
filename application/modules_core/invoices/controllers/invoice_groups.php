@@ -33,8 +33,6 @@ class Invoice_Groups extends Admin_Controller {
 
 		if (!$this->mdl_invoice_groups->validate()) {
 
-			$this->load->helper('form');
-
 			if (!$_POST AND uri_assoc('invoice_group_id', 4)) {
 
 				$this->mdl_invoice_groups->prep_validation(uri_assoc('invoice_group_id', 4));

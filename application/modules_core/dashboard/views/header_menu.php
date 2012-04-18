@@ -41,7 +41,7 @@
 				<?php echo anchor($module->module_path, $module->module_name); ?>
 				</li>
 			<?php } ?>
-		<?php } ?> 
+		<?php } ?>
 
 	</ul>
 </li>

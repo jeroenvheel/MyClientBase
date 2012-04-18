@@ -13,7 +13,7 @@
 			<form method="post" action="<?php echo site_url($this->uri->uri_string()); ?>">
 
 				<dl>
-					<dt><label><?php echo $this->lang->line('template'); ?>: </label></dt>
+					<dt><label>* <?php echo $this->lang->line('template'); ?>: </label></dt>
 					<dd>
 						<select name="template">
 							<?php foreach ($templates as $template) { ?>
@@ -24,15 +24,15 @@
 				</dl>
 
 				<dl>
-					<dt><label><?php echo $this->lang->line('from_name'); ?>: *</label></dt>
+					<dt><label>* <?php echo $this->lang->line('from_name'); ?>: </label></dt>
 					<dd><input type="text" name="email_from_name" value="<?php echo $this->mdl_mailer->form_value('email_from_name'); ?>" /></dd>
 				</dl>
 				<dl>
-					<dt><label><?php echo $this->lang->line('from_email'); ?>: *</label></dt>
+					<dt><label>* <?php echo $this->lang->line('from_email'); ?>: </label></dt>
 					<dd><input type="text" name="email_from_email" value="<?php echo $this->mdl_mailer->form_value('email_from_email'); ?>" /></dd>
 				</dl>
 				<dl>
-					<dt><label><?php echo $this->lang->line('to'); ?>: *</label></dt>
+					<dt><label>* <?php echo $this->lang->line('to'); ?>: </label></dt>
 					<dd><input type="text" name="email_to" value="<?php echo $this->mdl_mailer->form_value('email_to'); ?>" /></dd>
 				</dl>
 				<dl>
@@ -44,7 +44,7 @@
 					<dd><input type="text" name="email_bcc" value="<?php echo $this->mdl_mailer->form_value('email_bcc'); ?>" /></dd>
 				</dl>
 				<dl>
-					<dt><label><?php echo $this->lang->line('subject'); ?>: *</label></dt>
+					<dt><label>* <?php echo $this->lang->line('subject'); ?>: </label></dt>
 					<dd><input type="text" name="email_subject" value="<?php echo $this->mdl_mailer->form_value('email_subject'); ?>" /></dd>
 				</dl>
 				<dl>

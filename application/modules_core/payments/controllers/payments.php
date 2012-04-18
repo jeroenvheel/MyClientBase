@@ -2,232 +2,244 @@
 
 class Payments extends Admin_Controller {
 
-    function __construct() {
+	public function __construct() {
 
-        parent::__construct();
+		parent::__construct();
 
-        $this->_post_handler();
+		$this->_post_handler();
 
-        $this->load->model('mdl_payments');
+		$this->load->model('mdl_payments');
 
-    }
+	}
 
-    function index() {
+	public function index() {
 
-        $this->load->helper('text');
+		$this->load->helper('text');
+		$this->load->model('mdl_payment_table');
 
-        $this->redir->set_last_index();
+		$this->redir->set_last_index();
 
-        $order_by = uri_assoc('order_by');
+		$params = array(
+			'paginate'	=>	TRUE,
+			'page'		=>	uri_assoc('page')
+		);
 
-        $params = array(
-            'paginate'	=>	TRUE,
-            'page'		=>	uri_assoc('page')
-        );
 
-        switch ($order_by) {
-            case 'payment_id':
-                $params['order_by'] = 'mcb_payments.payment_id DESC';
-                break;
-            case 'client':
-                $params['order_by'] = 'client_name';
-                break;
-            case 'amount':
-                $params['order_by'] = 'payment_amount DESC';
-                break;
-            case 'invoice_id':
-                $params['order_by'] = 'invoice_number DESC';
-                break;
-            default:
-                $params['order_by'] = 'payment_date DESC';
-        }
+		$order_by = uri_assoc('order_by');
+		$order = uri_assoc('order');
 
-        if (!$this->session->userdata('global_admin')) {
+		switch ($order_by) {
+			case 'payment_id':
+				$params['order_by'] = 'mcb_payments.payment_id ' . $order;
+				break;
+			case 'client':
+				$params['order_by'] = 'client_name ' . $order;
+				break;
+			case 'amount':
+				$params['order_by'] = 'payment_amount ' . $order;
+				break;
+			case 'invoice_id':
+				$params['order_by'] = 'invoice_number ' . $order;
+				break;
+			case 'date':
+				$params['order_by'] = 'payment_date ' . $order;
+				break;
+			default:
+				$params['order_by'] = 'payment_date DESC';
+		}
 
-            $params['where'][] = 'mcb_invoices.invoice_id IN (SELECT invoice_id FROM mcb_invoices WHERE user_id = ' . $this->session->userdata('user_id') . ')';
+		if (!$this->session->userdata('global_admin')) {
 
-        }
+			$params['where'][] = 'mcb_invoices.invoice_id IN (SELECT invoice_id FROM mcb_invoices WHERE user_id = ' . $this->session->userdata('user_id') . ')';
 
-        $data = array(
-            'payments'		=>  $this->mdl_payments->get($params),
-            'sort_links'	=>	TRUE);
+		}
 
-        $this->load->view('index', $data);
+		$data = array(
+			'payments'		=>  $this->mdl_payments->get($params),
+			'sort_links'	=>	TRUE,
+			'table_headers'	=>	$this->mdl_payment_table->get_table_headers()
+		);
 
-    }
+		$this->load->view('index', $data);
 
-    function form() {
+	}
 
-        $this->load->model('invoices/mdl_invoices');
+	public function form() {
 
-        $payment_id = uri_assoc('payment_id');
+		$this->load->model('invoices/mdl_invoices');
 
-        $invoice_id = uri_assoc('invoice_id');
+		$payment_id = uri_assoc('payment_id');
 
-        if (!$this->mdl_payments->validate()) {
+		$invoice_id = uri_assoc('invoice_id');
 
-            $this->load->helper('text');
+		if (!$this->mdl_payments->validate()) {
 
-            $this->load->model('mdl_payment_methods');
+			$this->load->helper('text');
 
-            $data = array(
-                'payment_methods'	=>	$this->mdl_payment_methods->get(),
-                'custom_fields'		=>	$this->mdl_payments->custom_fields
-            );
+			$this->load->model('mdl_payment_methods');
 
-            if (!$_POST) {
+			$data = array(
+				'payment_methods'	=>	$this->mdl_payment_methods->get(),
+				'custom_fields'		=>	$this->mdl_payments->custom_fields
+			);
 
-                if ($payment_id) {
+			if (!$_POST) {
 
-                    $this->mdl_payments->prep_validation($payment_id);
+				if ($payment_id) {
 
-                }
+					$this->mdl_payments->prep_validation($payment_id);
 
-                else {
+				}
 
-                    $this->mdl_payments->set_date();
+				else {
 
+					$this->mdl_payments->set_date();
 
-                }
 
-            }
+				}
 
-            if ($invoice_id) {
+			}
 
-                $params = array(
-                    'select'	=>	'*',
-                    'where'	=>	array(
-                        'mcb_invoices.invoice_id'	=>	$invoice_id
-                    )
-                );
+			if ($invoice_id) {
 
-                if (!$this->session->userdata('global_admin')) {
+				$params = array(
+					'select'	=>	'*',
+					'where'	=>	array(
+						'mcb_invoices.invoice_id'	=>	$invoice_id
+					)
+				);
 
-                    $params['where']['mcb_invoices.user_id'] = $this->session->userdata('user_id');
+				if (!$this->session->userdata('global_admin')) {
 
-                }
+					$params['where']['mcb_invoices.user_id'] = $this->session->userdata('user_id');
 
-                $data['invoice'] = $this->mdl_invoices->get($params);
+				}
 
-                $this->load->view('form', $data);
+				$data['invoice'] = $this->mdl_invoices->get($params);
 
-            }
+				$this->load->view('form', $data);
 
-            else {
+			}
 
-                $params = array(
-                    'where'	=>	array(
-                        'invoice_balance >'	=>	0,
-                        'invoice_is_quote'  =>  0
-                    )
-                );
+			else {
 
-                if (!$this->session->userdata('global_admin')) {
+				$params = array(
+					'where'	=>	array(
+						'invoice_balance >'	=>	0,
+						'invoice_is_quote'  =>  0
+					)
+				);
 
-                    $params['where']['mcb_invoices.user_id'] = $this->session->userdata('user_id');
+				if (!$this->session->userdata('global_admin')) {
 
-                }
+					$params['where']['mcb_invoices.user_id'] = $this->session->userdata('user_id');
 
-                $invoices = $this->mdl_invoices->get($params);
+				}
 
-                if ($invoices) {
+				$invoices = $this->mdl_invoices->get($params);
 
-                    $data['invoices'] = $invoices;
+				if ($invoices) {
 
-                    $this->load->view('form', $data);
+					$data['invoices'] = $invoices;
 
-                }
+					$this->load->view('form', $data);
 
-                else {
+				}
 
-                    $this->load->view('form_no_invoices');
+				else {
 
-                }
+					$this->load->view('form_no_invoices');
 
-            }
+				}
 
-        }
+			}
 
-        else {
+		}
 
-            $this->mdl_payments->save();
+		else {
 
-            $this->load->model('invoices/mdl_invoice_amounts');
+			$this->mdl_payments->save();
 
-            if ($invoice_id) {
+			$this->load->model('invoices/mdl_invoice_amounts');
 
-                $this->mdl_invoice_amounts->adjust($invoice_id);
+			if ($invoice_id) {
 
-            }
+				$this->mdl_invoice_amounts->adjust($invoice_id);
 
-            elseif ($this->input->post('invoice_id')) {
+			}
 
-                $this->mdl_invoice_amounts->adjust($this->input->post('invoice_id'));
+			elseif ($this->input->post('invoice_id')) {
 
-            }
+				$this->mdl_invoice_amounts->adjust($this->input->post('invoice_id'));
 
-            $this->session->set_flashdata('tab_index', 2);
+				$invoice_id = $this->input->post('invoice_id');
 
-            $this->redir->redirect(array('payments', 'invoices'));
+			}
 
-        }
+			$this->load->model('invoices/mdl_invoice_history');
 
-    }
+			$this->mdl_invoice_history->save($invoice_id, $this->session->userdata('user_id'), sprintf($this->lang->line('payment_entered'), display_currency($this->input->post('payment_amount'))));
 
-    function delete() {
+			$this->session->set_flashdata('tab_index', 2);
 
-        if (uri_assoc('payment_id')) {
+			$this->redir->redirect(array('payments', 'invoices'));
 
-            $invoice_id = $this->mdl_payments->get_invoice_id(uri_assoc('payment_id'));
+		}
 
-            $this->mdl_payments->delete(array('payment_id'=>uri_assoc('payment_id')));
+	}
 
-            $this->load->model('invoices/mdl_invoice_amounts');
+	public function delete() {
 
-            $this->mdl_invoice_amounts->adjust($invoice_id);
+		if (uri_assoc('payment_id')) {
 
-        }
+			$invoice_id = $this->mdl_payments->get_invoice_id(uri_assoc('payment_id'));
 
-        $this->session->set_flashdata('tab_index', 2);
+			$this->mdl_payments->delete(array('payment_id'=>uri_assoc('payment_id')));
 
-        $this->redir->redirect(array('payments', 'invoices'));
+			$this->load->model('invoices/mdl_invoice_amounts');
 
-    }
+			$this->mdl_invoice_amounts->adjust($invoice_id);
 
-    function receipt() {
+		}
 
-        $this->load->library('lib_output');
+		$this->session->set_flashdata('tab_index', 2);
 
-        $invoice_id = uri_assoc('invoice_id');
+		$this->redir->redirect(array('payments', 'invoices'));
 
-        $payment_id = uri_assoc('payment_id');
+	}
 
-        $output_type = uri_assoc('type');
+	public function receipt() {
 
-        $receipt_template = uri_assoc('receipt_template');
+		$this->load->library('lib_output');
 
-        $this->lib_output->$output_type($invoice_id, $payment_id, $receipt_template);
+		$invoice_id = uri_assoc('invoice_id');
 
-    }
+		$payment_id = uri_assoc('payment_id');
 
-    function _post_handler() {
+		$output_type = uri_assoc('type');
 
-        if ($this->input->post('btn_add')) {
+		$receipt_template = uri_assoc('receipt_template');
 
-            redirect('payments/form');
+		$this->lib_output->$output_type($invoice_id, $payment_id, $receipt_template);
 
-        }
+	}
 
-        elseif ($this->input->post('btn_cancel')) {
+	public function _post_handler() {
 
-            redirect($this->session->userdata('last_index'));
+		if ($this->input->post('btn_add')) {
 
-        }
+			redirect('payments/form');
 
-    }
+		}
+
+		elseif ($this->input->post('btn_cancel')) {
+
+			redirect($this->session->userdata('last_index'));
+
+		}
+
+	}
 
 }
-
-
 
 ?>

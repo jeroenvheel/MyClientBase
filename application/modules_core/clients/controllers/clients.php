@@ -2,276 +2,285 @@
 
 class Clients extends Admin_Controller {
 
-    function __construct() {
+	public function __construct() {
+
+		parent::__construct();
+
+		$this->_post_handler();
+
+		$this->load->model('mdl_clients');
+
+	}
+
+	public function index() {
 
-        parent::__construct();
+		$this->load->helper('text');
+		$this->load->model('mdl_client_table');
 
-        $this->_post_handler();
+		$this->redir->set_last_index();
 
-        $this->load->model('mdl_clients');
+		$params = array(
+			'paginate'	=>	TRUE,
+			'limit'		=>	$this->mdl_mcb_data->setting('results_per_page'),
+			'page'		=>	uri_assoc('page')
+		);
 
-    }
+		$order_by = uri_assoc('order_by');
+		$order = uri_assoc('order');
+		$show = uri_assoc('show');
 
-    function index() {
+		switch ($order_by) {
+			case 'client_id':
+				$params['order_by'] = 'mcb_clients.client_id ' . $order;
+				break;
+			case 'client_name':
+				$params['order_by'] = 'mcb_clients.client_name ' . $order;
+				break;
+			case 'credit_amount':
+				$params['order_by'] = 'client_credit_amount ' . $order;
+				break;
+			case 'balance':
+				$params['order_by'] = 'client_total_balance ' . $order;
+				break;
+			case 'client_email':
+				$params['order_by'] = 'mcb_clients.client_email_address ' . $order;
+				break;
+			case 'client_phone':
+				$params['order_by'] = 'mcb_clients.client_phone_number ' . $order;
+				break;
+			case 'client_active':
+				$params['order_by'] = 'mcb_clients.client_active ' . $order;
+				break;
+			default:
+				$params['order_by'] = 'mcb_clients.client_name';
+		}
+		
+		if ($show == 'active') {
+			
+			$params['where']['client_active'] = 1;
+			
+		}
+		
+		elseif ($show == 'inactive') {
+			
+			$params['where']['client_active'] = 0;
+			
+		}
 
-        $this->load->helper('text');
+		$data = array(
+			'clients'		=>	$this->mdl_clients->get($params),
+			'table_headers'	=>	$this->mdl_client_table->get_table_headers()
+		);
 
-        $this->redir->set_last_index();
+		$this->load->view('index', $data);
 
-        $params = array(
-            'paginate'	=>	TRUE,
-            'limit'		=>	$this->mdl_mcb_data->setting('results_per_page'),
-            'page'		=>	uri_assoc('page')
-        );
+	}
 
-        $order_by = uri_assoc('order_by');
+	public function form() {
 
-        if ($order_by == 'client_id_desc') {
+		$this->load->model(
+			array(
+			'invoices/mdl_invoices',
+			'mdl_contacts',
+			'templates/mdl_templates',
+			'mcb_data/mdl_mcb_client_data',
+			'invoices/mdl_invoice_groups'
+			)
+		);
 
-            $params['order_by'] = 'client_id DESC';
+		$client_id = uri_assoc('client_id');
 
-        }
+		if ($this->mdl_clients->validate()) {
 
-        elseif ($order_by == 'client_id_asc') {
+			$this->mdl_clients->save();
 
-            $params['order_by'] = 'client_id ASC';
+			$client_id = ($client_id) ? $client_id : $this->db->insert_id();
 
-        }
+			foreach ($this->input->post('client_settings') as $key=>$value) {
 
-        elseif ($order_by == 'balance_desc') {
+				if ($value) {
 
-            $params['order_by'] = 'client_total_balance DESC';
+					$this->mdl_mcb_client_data->save($client_id, $key, $value);
 
-        }
+				}
 
-        elseif ($order_by == 'balance_asc') {
+				else {
 
-            $params['order_by'] = 'client_total_balance ASC';
+					$this->mdl_mcb_client_data->delete($client_id, $key);
 
-        }
+				}
 
-        elseif ($order_by == 'client_name_asc') {
+			}
 
-            $params['order_by'] = 'client_name ASC';
+			redirect('clients/form/client_id/' . $client_id);
 
-        }
+		}
 
-        elseif ($order_by == 'client_name_desc') {
+		else {
 
-            $params['order_by'] = 'client_name DESC';
+			if (!$_POST AND $client_id) {
 
-        }
+				$this->mdl_clients->prep_validation($client_id);
 
-        else {
+			}
 
-            $params['order_by'] = 'client_name';
+			$this->load->helper('text');
 
-        }
+			$client_id = uri_assoc('client_id');
 
-        $data = array(
-            'clients'	=>	$this->mdl_clients->get($params)
-        );
+			if ($client_id) {
 
-        $this->load->view('index', $data);
+				$this->mdl_mcb_client_data->set_session_data($client_id);
 
-    }
+			}
 
-    function form() {
+			$client_params = array(
+				'where'	=>	array(
+					'mcb_clients.client_id'	=>	$client_id
+				)
+			);
 
-        $client_id = uri_assoc('client_id');
+			$contact_params = array(
+				'where'	=>	array(
+					'mcb_contacts.client_id'    =>  $client_id
+				)
+			);
 
-        $this->load->model(
-            array(
-            'mcb_data/mdl_mcb_client_data',
-            'invoices/mdl_invoice_groups'
-            )
-        );
+			$invoice_params = array(
+				'where'	=>	array(
+					'mcb_invoices.client_id'        =>	$client_id,
+					'mcb_invoices.invoice_is_quote' =>  0
+				)
+			);
 
-        if ($client_id) {
+			$quote_params = array(
+				'where'	=>	array(
+					'mcb_invoices.client_id'		=>	$client_id,
+					'mcb_invoices.invoice_is_quote'	=>	1
+				)
+			);
 
-            $this->mdl_mcb_client_data->set_session_data($client_id);
+			if (!$this->session->userdata('global_admin')) {
 
-        }
+				$invoice_params['where']['mcb_invoices.user_id'] = $this->session->userdata('user_id');
 
-        if ($this->mdl_clients->validate()) {
+			}
 
-            $this->mdl_clients->save();
+			$client = $this->mdl_clients->get($client_params);
+			$contacts = $this->mdl_contacts->get($contact_params);
+			$invoices = $this->mdl_invoices->get($invoice_params);
+			$quotes = $this->mdl_invoices->get($quote_params);
+			$custom_fields = $this->mdl_clients->custom_fields;
+			$invoice_templates = $this->mdl_templates->get('invoices');
+			$invoice_groups = $this->mdl_invoice_groups->get();
 
-            $client_id = ($client_id) ? $client_id : $this->db->insert_id();
+			if ($this->session->flashdata('tab_index')) {
 
-            foreach ($this->input->post('client_settings') as $key=>$value) {
+				$tab_index = $this->session->flashdata('tab_index');
 
-                if ($value) {
+			}
 
-                    $this->mdl_mcb_client_data->save($client_id, $key, $value);
+			else {
 
-                }
+				$tab_index = 0;
 
-                else {
+			}
 
-                    $this->mdl_mcb_client_data->delete($client_id, $key);
+			$data = array(
+				'client'			=>	$client,
+				'contacts'			=>	$contacts,
+				'invoices'			=>	$invoices,
+				'quotes'			=>	$quotes,
+				'tab_index'			=>	$tab_index,
+				'custom_fields'		=>	$custom_fields,
+				'invoice_templates'	=>	$invoice_templates,
+				'invoice_groups'	=>	$invoice_groups
+			);
 
-                }
+			$this->load->view('form', $data);
 
-            }
+		}
 
-            redirect($this->session->userdata('last_index'));
+	}
 
-        }
+	public function delete() {
 
-        else {
+		$client_id = uri_assoc('client_id');
 
-            $this->load->model('templates/mdl_templates');
+		if ($client_id) {
 
-            $this->load->helper('form');
+			$this->mdl_clients->delete($client_id);
 
-            if (!$_POST AND $client_id) {
+		}
 
-                $this->mdl_clients->prep_validation($client_id);
+		$this->redir->redirect('clients');
 
-            }
+	}
 
-            $data = array(
-                'custom_fields'     =>	$this->mdl_clients->custom_fields,
-                'invoice_templates' =>  $this->mdl_templates->get('invoices'),
-                'invoice_groups'    =>  $this->mdl_invoice_groups->get()
-            );
+	public function get($params = NULL) {
 
-            $this->load->view('form', $data);
+		return $this->mdl_clients->get($params);
 
-        }
+	}
 
-    }
+	public function jquery_lookup() {
 
-    function details() {
+		$q = $this->input->get('term');
 
-        $this->redir->set_last_index();
+		$this->db->select('client_id, client_name, client_email_address');
+		$this->db->where("client_name LIKE '%" . $q . "%'");
+		$this->db->where("client_active", 1);
+		$clients = $this->db->get('mcb_clients')->result();
 
-        $this->load->helper('text');
+		$return = array();
 
-        $this->load->model(
-            array(
-            'invoices/mdl_invoices',
-            'mdl_contacts',
-            'templates/mdl_templates'
-            )
-        );
+		foreach ($clients as $client) {
 
-        $client_id = uri_assoc('client_id');
+			$return[] = array(
+				'label'	=>	$client->client_name,
+				'value'	=>	$client->client_id,
+				'email'	=>	$client->client_email_address
+			);
 
-        $client_params = array(
-            'where'	=>	array(
-                'mcb_clients.client_id'	=>	$client_id
-            )
-        );
+		}
 
-        $contact_params = array(
-            'where'	=>	array(
-                'mcb_contacts.client_id'    =>  $client_id
-            )
-        );
+		echo json_encode($return);
 
-        $invoice_params = array(
-            'where'	=>	array(
-                'mcb_invoices.client_id'        =>	$client_id,
-                'mcb_invoices.invoice_is_quote' =>  0
-            )
-        );
+	}
 
-        if (!$this->session->userdata('global_admin')) {
+	function _post_handler() {
 
-            $invoice_params['where']['mcb_invoices.user_id'] = $this->session->userdata('user_id');
+		if ($this->input->post('btn_add_client')) {
 
-        }
+			redirect('clients/form');
 
-        $client = $this->mdl_clients->get($client_params);
+		}
 
-        $contacts = $this->mdl_contacts->get($contact_params);
+		elseif ($this->input->post('btn_cancel')) {
 
-        $invoices = $this->mdl_invoices->get($invoice_params);
+			redirect($this->session->userdata('last_index'));
 
-        if ($this->session->flashdata('tab_index')) {
+		}
 
-            $tab_index = $this->session->flashdata('tab_index');
+		elseif ($this->input->post('btn_add_contact')) {
 
-        }
+			redirect('clients/contacts/form/client_id/' . uri_assoc('client_id'));
 
-        else {
+		}
 
-            $tab_index = 0;
+		elseif ($this->input->post('btn_add_invoice')) {
 
-        }
+			redirect('invoices/create/client_id/' . uri_assoc('client_id'));
 
-        $data = array(
-            'client'	=>	$client,
-            'contacts'	=>	$contacts,
-            'invoices'	=>	$invoices,
-            'tab_index'	=>	$tab_index
-        );
+		}
 
-        $this->load->view('details', $data);
+		elseif ($this->input->post('btn_add_quote')) {
 
-    }
+			redirect('invoices/create/quote/client_id/' . uri_assoc('client_id'));
 
-    function delete() {
+		}
 
-        $client_id = uri_assoc('client_id');
-
-        if ($client_id) {
-
-            $this->mdl_clients->delete($client_id);
-
-        }
-
-        $this->redir->redirect('clients');
-
-    }
-
-    function get($params = NULL) {
-
-        return $this->mdl_clients->get($params);
-
-    }
-
-    function _post_handler() {
-
-        if ($this->input->post('btn_add_client')) {
-
-            redirect('clients/form');
-
-        }
-
-        elseif ($this->input->post('btn_edit_client')) {
-
-            redirect('clients/form/client_id/' . uri_assoc('client_id'));
-
-        }
-
-        elseif ($this->input->post('btn_cancel')) {
-
-            redirect($this->session->userdata('last_index'));
-
-        }
-
-        elseif ($this->input->post('btn_add_contact')) {
-
-            redirect('clients/contacts/form/client_id/' . uri_assoc('client_id'));
-
-        }
-
-        elseif ($this->input->post('btn_add_invoice')) {
-
-            redirect('invoices/create/client_id/' . uri_assoc('client_id'));
-
-        }
-
-        elseif ($this->input->post('btn_add_quote')) {
-
-            redirect('invoices/create/quote/client_id/' . uri_assoc('client_id'));
-
-        }
-
-    }
+	}
 
 }
 

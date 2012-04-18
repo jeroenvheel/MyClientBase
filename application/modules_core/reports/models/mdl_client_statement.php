@@ -6,12 +6,18 @@ class Mdl_Client_Statement extends CI_Model {
 
         $params = array();
 
-        if ($include_closed_invoices == 'false') {
+		if (!$this->session->userdata('global_admin')) {
+
+			$params['where']['mcb_invoices.user_id'] = $this->session->userdata('user_id');
+
+		}
+
+        if (!$include_closed_invoices) {
 
             $params['where']['invoice_status_type'] = 1;
         }
 
-        if ($include_quotes == 'false') {
+        if (!$include_quotes) {
 
             $params['where']['invoice_is_quote'] = 0;
         }
