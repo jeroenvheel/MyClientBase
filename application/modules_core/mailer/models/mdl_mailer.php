@@ -93,7 +93,14 @@ class Mdl_Mailer extends MY_Model {
 		}
 
 		$full_filename = 'uploads/temp/' . $filename . '.pdf';
-
+		
+        $string = array(
+			'parse'		=>	$invoice,
+		);
+		
+		$email_body = $this->parser->parse_string($email_body, $string, TRUE);
+		$email_footer = $this->parser->parse_string($email_footer, $string, TRUE);
+		
 		$email_body = ($email_body) ? '<p>' . nl2br($email_body) . '</p>' : ' ';
 
 		$email_footer = ($email_footer) ? nl2br($email_footer) : ' ';
@@ -129,6 +136,10 @@ class Mdl_Mailer extends MY_Model {
 			$email_bcc);
 
 		$this->mdl_invoices->delete_invoice_file($filename . '.pdf');
+
+		$this->load->model('invoices/mdl_invoice_history');
+
+		$this->mdl_invoice_history->save($invoice->invoice_id, $this->session->userdata('user_id'), $this->lang->line('emailed_invoice') . ' to ' . $to);
 
 	}
 

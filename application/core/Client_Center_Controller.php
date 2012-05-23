@@ -37,7 +37,7 @@ class Client_Center_Controller extends MX_Controller {
 
 		$this->load->language('mcb', $this->mdl_mcb_data->setting('default_language'));
 
-		$this->load->library('form_validation');
+		$this->load->library(array('form_validation', 'parser'));
 
 		$this->load->model('fields/mdl_fields');
 

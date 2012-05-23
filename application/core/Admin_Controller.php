@@ -33,7 +33,7 @@ class Admin_Controller extends MX_Controller {
 			$this->load->helper(array('uri', 'mcb_currency', 'mcb_invoice',
 				'mcb_date', 'mcb_icon', 'mcb_custom', 'mcb_app',
 				'mcb_invoice_amount', 'mcb_invoice_item',
-				'mcb_invoice_payment', 'mcb_numbers'));
+				'mcb_invoice_payment', 'mcb_numbers', 'mcb_images'));
 
             $this->load->model(array('mcb_modules/mdl_mcb_modules','mcb_data/mdl_mcb_data','mcb_data/mdl_mcb_userdata'));
 
@@ -49,7 +49,7 @@ class Admin_Controller extends MX_Controller {
 
             $this->load->model('fields/mdl_fields');
 
-			$this->load->library(array('form_validation', 'redir'));
+			$this->load->library(array('form_validation', 'redir', 'parser'));
 
 			$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
 
