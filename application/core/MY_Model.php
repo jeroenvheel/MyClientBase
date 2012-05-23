@@ -7,10 +7,11 @@
  * My_Model is an extension to CodeIgniter's core model that helps make
  * developing models easier and less repetitive.
  *
- * @version 2011.07.02
+ * @version 2012.05.01
  * @copyright Copyright (c) 2011 Jesse Terry
  *
  * CHANGELOG
+ * 2012.05.01 - Addresses a couple of security vulnerabilities
  * 2011.07.02 - Added $params support for joins
  * 2011.06.01 - Added $params support for group_by
  * 2011.05.31 - Added query($params) method
@@ -295,8 +296,8 @@ class MY_Model extends CI_Model {
 			if (is_array($params['like'])) {
 
 				foreach ($params['like'] as $key=>$value) {
-
-					$this->db->where('(' . $key . " LIKE '%" . $value . "%' or " . $key . " LIKE '" . $value . "%')");
+					
+					$this->db->where('(' . $key . " LIKE " . $this->db->escape('%' . $value . '%') . " or " . $key . " LIKE " . $this->db->escape($value . '%') . ")");
 
 				}
 
@@ -538,7 +539,7 @@ class MY_Model extends CI_Model {
 
 			if (isset($_POST[$field])) {
 
-				$db_array[$field] = $this->input->post($field);
+				$db_array[$field] = $this->input->post($field, TRUE);
 
 			}
 

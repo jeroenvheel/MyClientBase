@@ -1,1 +1,6 @@
-/application/helpers/mpdf/
+﻿/application/helpers/mpdf/
+system/config/database.php
+*/logs/log-*.php
+*/logs/!index.html
+*/cache/*
+*/cache/!index.html
